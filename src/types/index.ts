@@ -11,7 +11,6 @@ export type CalendarFormData = {
 export const calendarTabs = [
   'Disponibilidad',
   'Citas',
-  'Sincronizar' 
 ] as const
 
 const CalendarTabsSchema = z.enum(calendarTabs)
