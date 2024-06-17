@@ -8,7 +8,6 @@ import { useQueryClient } from '@tanstack/react-query'
 type CalendarProps = {
   date: CalendarDate
   setDate: React.Dispatch<React.SetStateAction<CalendarDate>>
-  code: string | null
 }
 
 const Calendar = ({date, setDate} : CalendarProps) => {  
@@ -39,7 +38,7 @@ const Calendar = ({date, setDate} : CalendarProps) => {
         openTo='day'
         value={date}
         onChange={handleChange}
-        dayOfWeekFormatter={dayOfWeekFormatter}                
+        dayOfWeekFormatter={dayOfWeekFormatter}             
       />
     </LocalizationProvider>
   )
