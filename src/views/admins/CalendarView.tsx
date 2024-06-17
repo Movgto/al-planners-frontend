@@ -3,16 +3,12 @@ import { useState } from 'react'
 import { CalendarDate, CalendarTab, calendarTabs } from '@/types/index'
 import CalendarTabs from '@/components/admins/calendar/CalendarTabs'
 import { classes } from '@/utils/index'
-import { useLocation } from 'react-router-dom'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { getAuthURL, getEvents } from '@/api/calendarAPI'
+import { toast } from 'react-toastify'
+import CreateEventTypeModal from '@/components/admins/calendar/CreateEventTypeModal'
 
 const CalendarView = () => {
-  const location = useLocation()
-  const search = new URLSearchParams(location.search)
-  const code = search.get('code')
-  const codeExists = !!code
-
   const [date, setDate] = useState<CalendarDate>(new Date())
   const [tab, setTab] = useState<CalendarTab>('Disponibilidad')
 
@@ -22,77 +18,61 @@ const CalendarView = () => {
     console.log(tab)
   }
 
-  const {data} = useQuery({
+  const {} = useQuery({
     queryKey: ['authURL'],
     queryFn: getAuthURL,
     refetchOnWindowFocus: false
   })
-  
-  const {data : calendarData} = useQuery({
+
+  const { data, isError, isLoading, error, isRefetching } = useQuery({
     queryKey: ['calendarEvents'],
-    queryFn: () => getEvents(code!),
-    enabled: codeExists,
-    refetchOnWindowFocus: false,
+    queryFn: getEvents,
+    refetchOnWindowFocus: false
   })
 
-  const handleLoginGoogle = () => {
-    if (data) {
-      window.open(data.url, '_self')
-    }
+  if (isLoading) return 'Cargando eventos del calendario'
+
+  if (isError && error) {
+    toast.error(error.message)
+
+    return error.message
   }
 
-  if (!code) return (
+  if (isRefetching) console.log('Refetching events')
+
+  if (data) return (
     <div
       className="max-w-5xl flex flex-col py-24 gap-2"
     >
-      <h2
-        className="text-lg font-bold text-slate-600"
-      >Por favor acceda con su cuenta de Google para usar el calendario</h2>
-      <button
-        type="button"
-        className="bg-blue-700 text-white font-bold px-2 py-4"
-        onClick= {handleLoginGoogle}
-      >Acceder con Google</button>
-    </div>
-  )
-
-  if (calendarData) {
-    console.log(calendarData)
-    return (
       <div
-        className="max-w-5xl flex flex-col py-24 gap-2"
+        className='border-b-2 border-slate-300'
       >
         <div
-          className='border-b-2 border-slate-300'
+          className='flex gap-2 -mb-[2px]'
         >
-          <div
-            className='flex gap-2 -mb-[2px]'
-          >
-            {calendarTabs.map(t => (
-              <button
-                key={t}
-                type="button"
-                className={classes(tab === t ? 'border-rose-400 font-bold text-rose-700' : 'border-slate-400 text-slate-400', 'border-b-2 py-2')}
-                onClick={() => handleTabClick(t)}
-              >{t}</button>
-            ))}
-          </div>        
+          {calendarTabs.map(t => (
+            <button
+              key={t}
+              type="button"
+              className={classes(tab === t ? 'border-rose-400 font-bold text-rose-700' : 'border-slate-400 text-slate-400', 'border-b-2 py-2')}
+              onClick={() => handleTabClick(t)}
+            >{t}</button>
+          ))}
+        </div>        
+      </div>
+      <div className='flex flex-col lg:flex-row'>
+        <div
+          className="flex-1 bg-violet-50"
+        >
+          <Calendar date={date} setDate={setDate} />
         </div>
-        <div className='flex flex-col lg:flex-row'>
-          <div
-            className="flex-1 bg-violet-50"
-          >
-            <Calendar date={date} setDate={setDate} code={code} />
-          </div>
-          <div className="flex-1 bg-violet-50 py-4">
-            <CalendarTabs tab={tab} />
-          </div>
+        <div className="flex-1 bg-violet-50 py-4">
+          <CalendarTabs tab={tab} />
         </div>
       </div>
-    )
-  }
-
-  return null
+      <CreateEventTypeModal />
+    </div>
+  )
 }
 
 export default CalendarView
