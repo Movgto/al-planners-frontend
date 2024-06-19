@@ -7,6 +7,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { getAuthURL, getEvents } from '@/api/calendarAPI'
 import { toast } from 'react-toastify'
 import CreateEventTypeModal from '@/components/admins/calendar/CreateEventTypeModal'
+import CreateEventModal from '@/components/admins/calendar/CreateEventModal'
 
 const CalendarView = () => {
   const [date, setDate] = useState<CalendarDate>(new Date())
@@ -36,9 +37,7 @@ const CalendarView = () => {
     toast.error(error.message)
 
     return error.message
-  }
-
-  if (isRefetching) console.log('Refetching events')
+  }  
 
   if (data) return (
     <div
@@ -60,7 +59,7 @@ const CalendarView = () => {
           ))}
         </div>        
       </div>
-      <div className='flex flex-col lg:flex-row'>
+      <div className='flex flex-col lg:flex-row shadow-md'>
         <div
           className="flex-1 bg-violet-50"
         >
@@ -71,6 +70,7 @@ const CalendarView = () => {
         </div>
       </div>
       <CreateEventTypeModal />
+      <CreateEventModal />
     </div>
   )
 }
