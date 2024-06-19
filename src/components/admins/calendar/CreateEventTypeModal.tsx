@@ -1,10 +1,13 @@
+import { createEventType } from "@/api/calendarAPI"
 import ErrorMessage from "@/components/ErrorMessage"
 import { EventTypeFormData } from "@/types/index"
 import { Transition, Dialog, TransitionChild, DialogPanel } from "@headlessui/react"
 import { DialogTitle } from "@mui/material"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { Fragment } from "react"
 import { useForm } from "react-hook-form"
 import { useLocation, useNavigate } from "react-router-dom"
+import { toast } from "react-toastify"
 
 const defaultValues : EventTypeFormData = {
     name: '',
@@ -17,14 +20,27 @@ const CreateEventTypeModal = () => {
 
   const searchParams = new URLSearchParams(location.search)
 
-  const createEventType = searchParams.get('createEventType')
+  const createEventTypeQuery = searchParams.get('createEventType')
 
-  const show = !!createEventType
+  const show = !!createEventTypeQuery
+
+  const queryClient = useQueryClient()
+
+  const {mutate} = useMutation({
+    mutationFn: createEventType,
+    onError: error => toast.error(error.message),
+    onSuccess: data => {
+        queryClient.invalidateQueries({queryKey: ['eventTypes']})
+        toast.success(data)
+        navigate(location.pathname, {replace: true})
+    }
+  })
 
   const {register, handleSubmit, formState: {errors}} = useForm({defaultValues})
 
   const handleForm = (formData: EventTypeFormData) => {
     console.log(formData)
+    mutate(formData)
   }
 
   return (
