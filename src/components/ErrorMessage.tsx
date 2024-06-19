@@ -5,7 +5,7 @@ type ErrorMessageProps = {
 const ErrorMessage = ({message} : ErrorMessageProps) => {
     return (
         <div
-            className="bg-red-700 text-white font-semibold uppercase p-2"
+            className="border-2 border-red-600 text-red-600 font-semibold uppercase p-2"
         >
             <p
                 className="text-center"
