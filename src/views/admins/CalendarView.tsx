@@ -3,13 +3,15 @@ import { useState } from 'react'
 import { CalendarDate, CalendarTab, calendarTabs } from '@/types/index'
 import CalendarTabs from '@/components/admins/calendar/CalendarTabs'
 import { classes } from '@/utils/index'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { getAuthURL, getEvents } from '@/api/calendarAPI'
 import { toast } from 'react-toastify'
 import CreateEventTypeModal from '@/components/admins/calendar/CreateEventTypeModal'
 import CreateEventModal from '@/components/admins/calendar/CreateEventModal'
+import AppointmentModal from '@/components/admins/calendar/AppointmentModal'
+import AvailabilityModal from '@/components/admins/calendar/AvailabilityModal'
 
-const CalendarView = () => {
+const CalendarView = () => {  
   const [date, setDate] = useState<CalendarDate>(new Date())
   const [tab, setTab] = useState<CalendarTab>('Disponibilidad')
 
@@ -25,11 +27,20 @@ const CalendarView = () => {
     refetchOnWindowFocus: false
   })
 
-  const { data, isError, isLoading, error, isRefetching } = useQuery({
+  // const {data: gCalendarEvents} = useQuery({
+  //   queryKey: ['gCalendarEvents'],
+  //   queryFn: () => getGoogleAPIEvents(code!),
+  //   enabled: !!code,
+  //   refetchOnWindowFocus: false
+  // })
+
+  const { data, isError, isLoading, error } = useQuery({
     queryKey: ['calendarEvents'],
     queryFn: getEvents,
     refetchOnWindowFocus: false
   })
+
+  // if (gCalendarEvents) console.log(gCalendarEvents)
 
   if (isLoading) return 'Cargando eventos del calendario'
 
@@ -71,6 +82,8 @@ const CalendarView = () => {
       </div>
       <CreateEventTypeModal />
       <CreateEventModal />
+      <AppointmentModal />
+      <AvailabilityModal />
     </div>
   )
 }
