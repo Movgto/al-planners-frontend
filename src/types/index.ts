@@ -3,23 +3,32 @@ import {z} from 'zod'
 //Calendar types
 
 export type CalendarDate = Date | null
-export type CalendarFormData = {
-  startTime: number
-  endTime: number
-}
+
+export const availabilityTimeSchema = z.object({
+  _id: z.string(),
+  startTime: z.string(),
+  endTime: z.string()
+})
+
+export const availabilityTimesSchema = z.array(availabilityTimeSchema)
+
+export type Availability = z.infer<typeof availabilityTimeSchema>
+
+export type AvailabilityFormData = Pick<Availability, 'startTime'|'endTime'>
 
 export const calendarTabs = [
   'Disponibilidad',
   'Citas',
 ] as const
 
-const CalendarTabsSchema = z.enum(calendarTabs)
+const calendarTabsSchema = z.enum(calendarTabs)
 
-export type CalendarTab = z.infer<typeof CalendarTabsSchema>
+export type CalendarTab = z.infer<typeof calendarTabsSchema>
 
 // Events types
 
-const eventSchema = z.object({
+export const eventSchema = z.object({
+  _id: z.string(),
   summary: z.string(),
   start: z.object({
     dateTime: z.string()    
