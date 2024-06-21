@@ -71,8 +71,6 @@ const Calendar = ({date, setDate} : CalendarProps) => {
   const serverDay = (props: PickersDayProps<Date> & { highlightedDays?: number[] }) => {
     const {day, outsideCurrentMonth, ...other} = props
 
-    
-
     const isSelected = () => {
       if (day.getMonth() !== currentMonth.getMonth()) return false
 
@@ -108,8 +106,12 @@ const Calendar = ({date, setDate} : CalendarProps) => {
   useEffect(() => {
     if (!date || !data) return
     console.log('Updating highlighted days from useEffect')
+    queryClient.setQueryData<CalendarDate>(['selectedDate'], () => {
+      return date
+    })
+    queryClient.invalidateQueries({queryKey: ['selectedDate']})
     setHighlightedDays(getHighlightedDays(date, data))
-  }, [])
+  }, [data])
 
   if (isLoading) return 'Cargando eventos'
 
@@ -126,6 +128,7 @@ const Calendar = ({date, setDate} : CalendarProps) => {
           onChange={handleChange}
           dayOfWeekFormatter={dayOfWeekFormatter}
           timezone='America/Mexico_City'
+          minDate={new Date()}
           slots={{
             day: serverDay
           }}
