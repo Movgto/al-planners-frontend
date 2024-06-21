@@ -7,3 +7,25 @@ export const classes = (...classes: string[]) => {
 export const getDateInTimezone = (timeNumber: number) => {
   return DateTime.fromISO(new Date(timeNumber).toISOString(), {zone: 'America/Mexico_City'}).toISO()!
 }
+
+export const formatHour = (isoDate: string) => {
+  const date = new Date(isoDate)
+
+  const hour = date.getHours()
+
+  const dayTime = hour <= 11 ? 'am' : 'pm'
+
+  const formatHour = hour <= 12 ? hour : hour - 12
+
+  return formatHour + dayTime
+}
+
+export const dateFormater = (isoDate: string) => {
+  const date = new Date(isoDate)
+  const displayDate = new Intl.DateTimeFormat('es-MX', {
+    year: 'numeric',
+    month: 'short',
+    day: '2-digit'
+  }).format(date)
+  return displayDate
+}
