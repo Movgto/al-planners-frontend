@@ -1,13 +1,20 @@
-import { getEvents } from "@/api/calendarAPI"
-import { AppointmentMenuOptionProps, CalendarDate } from "@/types/index"
-import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { getEvents, syncEvents } from "@/api/calendarAPI"
+import { AppointmentMenuOptionProps, EventList } from "@/types/index"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useNavigate } from "react-router-dom"
 import AppointmenstList from "./AppointmenstList"
-import { useSelectedDate } from "@/hooks/index"
+import { useAuthUrl, useGApiCode, useSelectedDate } from "@/hooks/index"
+import { toast } from "react-toastify"
 
 const SeeAppointmentsOption = ({setOption} : AppointmentMenuOptionProps) => {
 
   const navigate = useNavigate()
+
+  const queryClient = useQueryClient()
+
+  const code = useGApiCode()
+
+  const {data: authUrl} = useAuthUrl()
 
   const handleClick = () => {
     setOption('Inicio')
@@ -19,20 +26,45 @@ const SeeAppointmentsOption = ({setOption} : AppointmentMenuOptionProps) => {
     refetchOnWindowFocus: false
   })
 
+  const { mutate } = useMutation({
+    mutationFn: syncEvents,
+    onError: error => toast.error(error.message),
+    onSuccess: data => {
+      queryClient.invalidateQueries({queryKey: ['calendarEvents']})
+      toast.success(data)
+    }
+  })
+
   const date = useSelectedDate()
 
-  return (
+  const eventsToSync = (events: EventList) => {
+    const eventsToSync = events.filter(e => !e.sentToCalendar)
+    return eventsToSync
+  }
+
+  const handleAuth = () => {
+    if (!authUrl) return
+    
+    window.open(authUrl.url, '_self')
+  }
+
+  const handleSync = () => {
+    if (!code) return
+    mutate(code)
+  }
+
+  if (data) return (
     <div
-      className='min-w-80 p-4 h-full'
+      className='min-w-80 p-4 h-full flex flex-col gap-4'
     >
       <ul
-        className="flex gap-2 border"
+        className="flex gap-2 flex-wrap"
       >
         <li className="flex-1">
           <button
             type="button"
             onClick={handleClick}
-            className="bg-rose-700 py-2 text-white font-bold uppercase w-full hover:bg-rose-500"
+            className="bg-rose-700 py-2 text-white font-bold uppercase w-full hover:bg-rose-500 text-nowrap px-2"
           >Volver</button>
         </li>
 
@@ -40,12 +72,33 @@ const SeeAppointmentsOption = ({setOption} : AppointmentMenuOptionProps) => {
           <button
             type="button"
             onClick={() => navigate('?createEvent=true')}
-            className="bg-rose-700 py-2 text-white font-bold uppercase w-full hover:bg-rose-500"
+            className="bg-rose-700 py-2 text-white font-bold uppercase w-full hover:bg-rose-500 text-nowrap px-2"
           >Añadir Cita</button>
         </li>
+
+        {(code && data.length && eventsToSync(data).length) ? (
+          <li className="flex-1">
+            <button
+              type="button"
+              onClick={handleSync}
+              className="bg-cyan-700 py-2 text-white font-bold uppercase w-full hover:bg-cyan-500 text-nowrap px-2"
+            >Sincronizar Pendientes {eventsToSync(data).length}</button>
+          </li>
+        ) : null}
+
+        {authUrl && !code && (
+          <li className="flex-1">
+          <button
+            type="button"
+            onClick={handleAuth}
+            className="bg-cyan-700 py-2 text-white font-bold uppercase w-full hover:bg-cyan-500 text-nowrap px-2"
+          >Accede con Google para Sincronizar</button>
+        </li>
+        )}
+        
       </ul>
 
-      {data && data.length ? (
+      {data.length ? (
         <AppointmenstList eventList={data} isoDate={date.toISOString()} />
       ) : (
         <div
