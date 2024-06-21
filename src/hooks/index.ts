@@ -1,6 +1,8 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { CalendarDate, EventList } from "../types"
 import { useMemo } from "react"
+import { getAuthURL } from "@/api/calendarAPI"
+import { useLocation } from "react-router-dom"
 
 export const useEventsFromDate = (eventList: EventList, isoDate: string) => {
 
@@ -46,3 +48,23 @@ export const useSelectedDate = () => {
 
   return date
 }
+
+export const useAuthUrl = () => {
+  const {data, isLoading, isError, error} = useQuery({
+    queryKey: ['authURL'],
+    queryFn: getAuthURL,
+    refetchOnWindowFocus: false
+  })
+
+  return {data, isLoading, isError, error}
+}
+
+export const useGApiCode = () => {
+  const location = useLocation()
+
+  const searchParams = new URLSearchParams(location.search)
+
+  const code = searchParams.get('code')
+
+  return code
+} 
