@@ -15,6 +15,7 @@
       "@/types/*": ["types/*"],
       "@/utils/*": ["utils/*"],
       "@/hooks/*": ["hooks/*"],
+      "@/styles/*": ["styles/*"],
     },
 
     /* Bundler mode */
