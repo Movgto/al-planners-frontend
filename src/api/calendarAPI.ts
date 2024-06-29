@@ -1,6 +1,7 @@
 import api from '@/config/axios'
 import {handleAxiosError} from '@/utils/api'
 import { Availability, AvailabilityFormData, Event, EventFormData, EventType, EventTypeFormData, availabilityTimesSchema, eventListSchema, eventSchema, eventTypeSchema, eventTypesSchema } from '../types'
+import { dateInTimezone, dateInTimezoneISO, getDateInTimezone } from '../utils'
 
 export const getAuthURL = async () => {
   const url = '/googleapi/auth-url'
@@ -170,7 +171,7 @@ export const createAvailableTime = async (formData: AvailabilityFormData) => {
   }
 }
 
-export const getAvailableTimes = async (isoDate: string) => {
+export const getAvailableTimes = async (isoDate: string) => {  
   const url = `/availability/${isoDate}`
 
   try {
@@ -180,6 +181,7 @@ export const getAvailableTimes = async (isoDate: string) => {
 
     console.log('====== Available times ======')
     console.log(result)
+    console.log('From date', isoDate)
 
     if (result.success) return result.data
     
