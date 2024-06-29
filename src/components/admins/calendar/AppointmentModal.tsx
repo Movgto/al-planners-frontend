@@ -17,10 +17,10 @@ const AppointmentModal = () => {
   const show = !!seeAppoint
 
   const handleClose = () => {
-    navigate(location.pathname, {replace: true})
+    navigate(location.pathname, { replace: true })
   }
 
-  const {data} = useQuery({
+  const { data } = useQuery({
     queryKey: ['calendarEvent', seeAppoint],
     queryFn: () => getEvent(seeAppoint!),
     enabled: show,
@@ -76,14 +76,33 @@ const AppointmentModal = () => {
                     {formatHour(data.start.dateTime)}{' - '}
                     {formatHour(data.end.dateTime)}
                   </span>
-                  
+
                 </p>
 
                 <p
                   className="flex gap-4 items-center text-xl text-rose-800 font-bold"
                 >
-                  {data.summary}               
-                </p>                     
+                  {data.summary}
+                </p>
+                <div
+                  className="flex flex-col gap-2 text-left w-full text-xl"
+                >
+                  <p
+                    className="flex justify-between"
+                  >
+                    <span
+                      className="font-bold"
+                    >Nombre de participante:</span> <span>{data.attendee.name}</span>
+                  </p>
+                  <p
+                    className="flex justify-between"
+                  >
+                    <span
+                      className="font-bold"
+                    >Correo electrónico de participante:</span> <span>{data.attendee.email}</span>
+                  </p>
+                </div>
+
               </DialogPanel>
             </TransitionChild>
           </div>
