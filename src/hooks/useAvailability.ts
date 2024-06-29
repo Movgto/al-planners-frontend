@@ -1,7 +1,6 @@
 import { RangeAvailability } from "@/components/users/schedule/ScheduleModal"
 import { Availability, Event, EventType } from "../types"
 import { useMemo } from "react"
-import { toast } from "react-toastify"
 
 type UseAvailabilityParams = {
   availableTimes: Availability[] | undefined
