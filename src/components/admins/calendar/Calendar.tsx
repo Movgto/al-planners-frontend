@@ -1,10 +1,10 @@
 import { LocalizationProvider, PickersDay, PickersDayProps } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3'
-import { StaticDatePicker, StaticDatePickerProps, StaticDatePickerSlotProps, StaticDatePickerSlots } from '@mui/x-date-pickers/StaticDatePicker'
+import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker'
 import {es} from 'date-fns/locale/es'
-import { CalendarDate, EventList } from '@/types/index'
+import { Availability, CalendarDate, EventList } from '@/types/index'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { getEvents } from '@/api/calendarAPI'
+import { getAllAvailableTimes, getEvents } from '@/api/calendarAPI'
 import { Badge } from '@mui/material'
 import { useEffect, useState } from 'react'
 
@@ -12,6 +12,8 @@ type CalendarProps = {
   date: CalendarDate
   setDate: React.Dispatch<React.SetStateAction<CalendarDate>>
 }
+
+
 
 const Calendar = ({date, setDate} : CalendarProps) => {
 
@@ -21,6 +23,12 @@ const Calendar = ({date, setDate} : CalendarProps) => {
   const {data, isLoading, isError, error} = useQuery({
     queryKey: ['calendarEvents'],
     queryFn: getEvents,
+  })
+
+  const {data: availableTimes} = useQuery({
+    queryKey: ['availableTimes'],
+    queryFn: () => getAllAvailableTimes(date!.toISOString()),
+    enabled: !!date
   })
 
   const getHighlightedDays = (date: Date, eventList: EventList) => {
@@ -45,7 +53,31 @@ const Calendar = ({date, setDate} : CalendarProps) => {
     return highlightedDays
   }
 
+  const getOpenDays = (date: Date, availableTimes: Availability[]) => {
+    const openDays : number[] = []
+    const currentYear = date.getFullYear()
+    const currentMonth = date.getMonth()  
+
+
+
+    for (const a of availableTimes) {
+      const year = new Date(a.startTime).getFullYear()
+      const month = new Date(a.startTime).getMonth()
+      const day = new Date(a.startTime).getDate()
+
+      if (year !== currentYear || month !== currentMonth) continue
+
+      if (openDays.includes(day)) continue
+
+      openDays.push(day)
+    }
+
+    return openDays
+  }
+
   const [highlightedDays, setHighlightedDays] = useState<number[]>([])
+
+  const [openDays, setOpenDays] = useState<number[]>([])
 
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date())
   
@@ -79,6 +111,14 @@ const Calendar = ({date, setDate} : CalendarProps) => {
       return true
     }
 
+    const isOpen = () => {
+      if (day.getMonth() !== currentMonth.getMonth()) return false
+
+      if (!openDays.includes(day.getDate())) return false
+
+      return true
+    }
+
     return (
       <Badge
         key={day!.toString()}
@@ -90,7 +130,12 @@ const Calendar = ({date, setDate} : CalendarProps) => {
         ) : undefined}
         
       >
-        <PickersDay {...other} outsideCurrentMonth={outsideCurrentMonth} day={day} />
+        <PickersDay {...other} outsideCurrentMonth={outsideCurrentMonth} day={day}
+          sx={{
+            backgroundColor: isOpen() ? 'deepskyblue' : 'white',
+            color: isOpen() ? 'white' : 'black'
+          }}
+        />
       </Badge>
     )
   }
@@ -101,6 +146,8 @@ const Calendar = ({date, setDate} : CalendarProps) => {
     if (!data) return
     console.log('Updating highlighted days for this month')
     setHighlightedDays(getHighlightedDays(month, data))
+    if (!availableTimes) return
+    setOpenDays(getOpenDays(month, availableTimes))
   }
 
   useEffect(() => {
@@ -111,6 +158,8 @@ const Calendar = ({date, setDate} : CalendarProps) => {
     })
     queryClient.invalidateQueries({queryKey: ['selectedDate']})
     setHighlightedDays(getHighlightedDays(date, data))
+    if (!availableTimes) return
+    setOpenDays(getOpenDays(date, availableTimes))
   }, [data])
 
   if (isLoading) return 'Cargando eventos'
@@ -135,7 +184,10 @@ const Calendar = ({date, setDate} : CalendarProps) => {
           slotProps={{
             day: {
               highlightedDays
-            } as any
+            } as any,
+            actionBar: {
+              actions: []
+            }
           }}      
           onMonthChange={handleMonthChange}                
         />
