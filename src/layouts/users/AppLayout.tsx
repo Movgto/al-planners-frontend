@@ -1,13 +1,18 @@
 import Footer from '@/components/admins/Footer'
-import Header from '@/components/admins/Header'
+import UsersHeader from '@/components/users/UsersHeader'
 import {Outlet} from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
 
 const AppLayout = () => {
   return (
-    <>
-      <Header />
+    <>      
+      <UsersHeader />
       <Outlet />
       <Footer />
+      <ToastContainer
+        closeOnClick
+        theme='colored'
+      />
     </>
   )
 }
