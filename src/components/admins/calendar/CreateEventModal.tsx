@@ -21,7 +21,9 @@ const hours = () => {
 
 const defaultValues = {
 	eventType: '',
-	startTime: ''
+	startTime: '',
+	attendeeName: '',
+	attendeeEmail: ''
 }
 
 const CreateEventModal = () => {
@@ -84,7 +86,11 @@ const CreateEventModal = () => {
 			end: {
 				dateTime: getDateInTimezone(selectedDate.setHours(+formData.startTime + eventType.duration))
 			},
-			sentToCalendar: false
+			sentToCalendar: false,
+			attendee: {
+				name: formData.attendeeName,
+				email: formData.attendeeEmail
+			}
 		}
 
 		mutate(event)
@@ -201,6 +207,44 @@ const CreateEventModal = () => {
 											<ErrorMessage
 												message={errors.startTime.message}
 											/>
+										)}
+									</div>
+
+									<div
+										className="flex flex-col gap-2"
+									>
+										<label
+											htmlFor="attendeeName"
+											className="text-slate-600 font-semibold"
+										>Nombre de participante</label>
+										<input
+											id="attendeeName"
+											type="text"
+											{...register('attendeeName', {
+												required: 'Este campo es obligatorio'
+											})}
+										/>
+										{errors.attendeeName && errors.attendeeName.message && (
+											<ErrorMessage message={errors.attendeeName.message} />
+										)}
+									</div>
+
+									<div
+										className="flex flex-col gap-2"
+									>
+										<label
+											htmlFor="attendeeEmail"
+											className="text-slate-600 font-semibold"
+										>Correo electrónico de participante</label>
+										<input
+											id="attendeeEmail"
+											type="text"
+											{...register('attendeeEmail', {
+												required: 'Este campo es obligatorio'
+											})}
+										/>
+										{errors.attendeeEmail && errors.attendeeEmail.message && (
+											<ErrorMessage message={errors.attendeeEmail.message} />
 										)}
 									</div>
 
