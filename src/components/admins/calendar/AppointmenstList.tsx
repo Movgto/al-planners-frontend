@@ -40,12 +40,7 @@ const AppointmenstList = ({eventList, isoDate} : AppointmenstListProps) => {
   })
 
   const handleDelete = (eventId: string) => {
-    if (!code) {
-      toast.error('Tienes que acceder con Google antes de eliminar un evento')
-      return
-    }
-
-    mutate({code, eventId})
+    mutate({code: code || 'asdasdasd', eventId})
   }
 
   return (
@@ -68,7 +63,7 @@ const AppointmenstList = ({eventList, isoDate} : AppointmenstListProps) => {
             <p>{formatHour(e.end.dateTime)}</p>
           </div>
           <i
-            className="text-red-600 hover:text-red-300 hover:cursor-pointer"
+            className="text-red-600 hover:text-red-300 hover:cursor-pointer z-[5]"
             onClick={() => handleDelete(e._id)}
           ><TrashIcon width="24px" height="24px" /></i>
         </li>
