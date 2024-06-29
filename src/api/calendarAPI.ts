@@ -1,7 +1,6 @@
 import api from '@/config/axios'
 import {handleAxiosError} from '@/utils/api'
 import { Availability, AvailabilityFormData, Event, EventFormData, EventType, EventTypeFormData, availabilityTimesSchema, eventListSchema, eventSchema, eventTypeSchema, eventTypesSchema } from '../types'
-import { dateInTimezone, dateInTimezoneISO, getDateInTimezone } from '../utils'
 
 export const getAuthURL = async () => {
   const url = '/googleapi/auth-url'
