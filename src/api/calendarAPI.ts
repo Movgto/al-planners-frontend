@@ -1,14 +1,12 @@
-import ax from 'axios'
+import api from '@/config/axios'
 import {handleAxiosError} from '@/utils/api'
-import { Availability, AvailabilityFormData, Event, EventFormData, EventType, EventTypeFormData, availabilityTimesSchema, eventListSchema, eventSchema, eventTypesSchema } from '../types'
-
-const {VITE_API_URL} = import.meta.env
+import { Availability, AvailabilityFormData, Event, EventFormData, EventType, EventTypeFormData, availabilityTimesSchema, eventListSchema, eventSchema, eventTypeSchema, eventTypesSchema } from '../types'
 
 export const getAuthURL = async () => {
-  const url = VITE_API_URL + '/api/googleapi/auth-url'
+  const url = '/googleapi/auth-url'
 
   try {
-    const {data} = await ax(url)
+    const {data} = await api(url)
 
     return data
   } catch (error) {
@@ -18,10 +16,10 @@ export const getAuthURL = async () => {
 }
 
 export const getGoogleAPIEvents = async (code: string) => {
-  const url = VITE_API_URL + '/api/googleapi/events?code=' + code
+  const url = '/googleapi/events?code=' + code
 
   try {
-    const {data} = await ax(url)
+    const {data} = await api(url)
 
     return data
   } catch (error) {
@@ -30,10 +28,10 @@ export const getGoogleAPIEvents = async (code: string) => {
 }
 
 export const getEvents = async () => {
-  const url = VITE_API_URL + '/api/events'
+  const url = '/events'
 
   try {
-    const {data} = await ax(url)
+    const {data} = await api(url)
 
     const result = eventListSchema.safeParse(data)
 
@@ -48,9 +46,9 @@ export const getEvents = async () => {
 
 export const getEvent = async (eventId: Event['_id']) => {
   
-  const url = VITE_API_URL + `/api/events/${eventId}`
+  const url = `/events/${eventId}`
   try {
-    const {data} = await ax(url)
+    const {data} = await api(url)
 
     const result = eventSchema.safeParse(data)
 
@@ -61,9 +59,9 @@ export const getEvent = async (eventId: Event['_id']) => {
 }
 
 export const syncEvents = async (code: string) => {
-  const url = VITE_API_URL + `/api/googleapi/syncEvents`
+  const url = `/googleapi/syncEvents`
   try {
-    const {data} = await ax.post(url, {code})
+    const {data} = await api.post(url, {code})
   
     return data
     
@@ -72,11 +70,38 @@ export const syncEvents = async (code: string) => {
   }
 }
 
-export const getEventTypes = async () => {
-  const url = VITE_API_URL + '/api/eventTypes'
+
+export const createEvent = async (formData : EventFormData) => {
+  const url = '/events'
+  
+  try {
+    const {data} = await api.post(url, formData)
+    
+    return data
+  } catch (error) {
+    handleAxiosError(error)
+  }
+}
+
+export const deleteEvent = async ({code, eventId} : DeleteEventParams) => {
+  const url = `/googleapi/events/${eventId}`
 
   try {
-    const {data} = await ax(url)
+    const {data} = await api.delete(url, {data: {code}})
+
+    return data
+  } catch (error) {
+    handleAxiosError(error)
+  }
+}
+
+// Event types api functions
+
+export const getEventTypes = async () => {
+  const url = '/eventTypes'
+
+  try {
+    const {data} = await api(url)
 
     const result = eventTypesSchema.safeParse(data)
     console.log(result)
@@ -86,25 +111,27 @@ export const getEventTypes = async () => {
   }
 }
 
-export const createEvent = async (formData : EventFormData) => {
-  const url = VITE_API_URL + '/api/events'
+export const getEventType = async (eventTypeId: EventType['_id']) => {
+  const url = `/eventTypes/${eventTypeId}`
 
   try {
-    const {data} = await ax.post(url, formData)
+    const {data} = await api(url)
 
-    return data
+    const result = eventTypeSchema.safeParse(data)
+
+    if (result.success) return result.data
   } catch (error) {
     handleAxiosError(error)
   }
 }
 
 export const createEventType = async (formData : EventTypeFormData) => {
-  const url = VITE_API_URL + '/api/eventTypes'
+  const url = '/eventTypes'
 
   try {
 
     console.log(formData)
-    const {data} = await ax.post(url, formData)
+    const {data} = await api.post(url, formData)
 
     return data as string
 
@@ -114,9 +141,9 @@ export const createEventType = async (formData : EventTypeFormData) => {
 }
 
 export const deleteEventType = async (eventTypeId: EventType['_id']) => {
-  const url = VITE_API_URL + `/api/eventTypes/${eventTypeId}`
+  const url = `/eventTypes/${eventTypeId}`
   try {
-    const {data} = await ax.delete(url)
+    const {data} = await api.delete(url)
 
     return data
   } catch (error) {
@@ -129,25 +156,13 @@ type DeleteEventParams = {
   eventId: string
 }
 
-export const deleteEvent = async ({code, eventId} : DeleteEventParams) => {
-  const url = VITE_API_URL + `/api/googleapi/events/${eventId}`
-
-  try {
-    const {data} = await ax.delete(url, {data: {code}})
-
-    return data
-  } catch (error) {
-    handleAxiosError(error)
-  }
-}
-
 // Availability times
 
 export const createAvailableTime = async (formData: AvailabilityFormData) => {
-  const url = VITE_API_URL + '/api/availability'
+  const url = '/availability'
 
   try {
-    const {data} = await ax.post(url, formData)
+    const {data} = await api.post(url, formData)
 
     return data
   } catch (error) {
@@ -156,10 +171,27 @@ export const createAvailableTime = async (formData: AvailabilityFormData) => {
 }
 
 export const getAvailableTimes = async (isoDate: string) => {
-  const url = VITE_API_URL + `/api/availability/${isoDate}`
+  const url = `/availability/${isoDate}`
 
   try {
-    const {data} = await ax(url)
+    const {data} = await api(url)
+
+    const result = availabilityTimesSchema.safeParse(data)
+
+    console.log('====== Available times ======')
+    console.log(result)
+
+    if (result.success) return result.data
+    
+  } catch (error) {
+    handleAxiosError(error)
+  }
+}
+export const getAllAvailableTimes = async (isoDate: string) => {
+  const url = `/availability/${isoDate}`
+
+  try {
+    const {data} = await api.post(url)
 
     const result = availabilityTimesSchema.safeParse(data)
 
@@ -171,10 +203,10 @@ export const getAvailableTimes = async (isoDate: string) => {
 }
 
 export const deleteAvailableTime = async (availabilityId: Availability['_id']) => {
-  const url = VITE_API_URL + `/api/availability/${availabilityId}`
+  const url = `/availability/${availabilityId}`
 
   try {
-    const {data} = await ax.delete(url)
+    const {data} = await api.delete(url)
 
     return data
   } catch (error) {
