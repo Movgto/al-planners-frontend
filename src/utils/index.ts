@@ -12,6 +12,10 @@ export const dateInTimezone = (date: Date) => {
   return new Date(date.toLocaleString('en-US', {timeZone: 'America/Mexico_City'}))
 }
 
+export const dateInTimezoneISO = (date: Date) => {
+  return date.toLocaleString('en-US', {timeZone: 'America/Mexico_City'})
+}
+
 export const formatHour = (isoDate: string) => {
   const date = new Date(isoDate)
 
