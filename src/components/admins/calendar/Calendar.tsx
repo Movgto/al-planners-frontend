@@ -7,6 +7,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getAllAvailableTimes, getEvents } from '@/api/calendarAPI'
 import { Badge } from '@mui/material'
 import { useEffect, useState } from 'react'
+import { dateInTimezone } from '@/utils/index'
 
 type CalendarProps = {
   date: CalendarDate
@@ -64,6 +65,13 @@ const Calendar = ({date, setDate} : CalendarProps) => {
       const year = new Date(a.startTime).getFullYear()
       const month = new Date(a.startTime).getMonth()
       const day = new Date(a.startTime).getDate()
+      
+      console.log('====== Year of time available ======')
+      console.log(year)
+      console.log('====== Month of time available ======')
+      console.log(month)
+      console.log('====== Day of time available ======')
+      console.log(day)
 
       if (year !== currentYear || month !== currentMonth) continue
 
@@ -79,7 +87,7 @@ const Calendar = ({date, setDate} : CalendarProps) => {
 
   const [openDays, setOpenDays] = useState<number[]>([])
 
-  const [currentMonth, setCurrentMonth] = useState<Date>(new Date())
+  const [currentMonth, setCurrentMonth] = useState<Date>(dateInTimezone(new Date()))
   
   const handleChange = (date: CalendarDate) => {
     setDate(date)
