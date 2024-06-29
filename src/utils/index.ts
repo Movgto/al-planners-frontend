@@ -20,6 +20,14 @@ export const formatHour = (isoDate: string) => {
   return formatHour + dayTime
 }
 
+export const formatHourNum = (hour: number) => {
+  const dayTime = hour <= 11 ? 'am' : 'pm'
+
+  const formatHour = hour <= 12 ? hour : hour - 12
+
+  return formatHour + dayTime
+}
+
 export const dateFormater = (isoDate: string) => {
   const date = new Date(isoDate)
   const displayDate = new Intl.DateTimeFormat('es-MX', {
@@ -29,3 +37,5 @@ export const dateFormater = (isoDate: string) => {
   }).format(date)
   return displayDate
 }
+
+export const emailRegex = /^[a-z0-9._-]+@[a-z0-9._-]+.[a-z]+$/i
