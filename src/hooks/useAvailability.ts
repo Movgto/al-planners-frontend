@@ -1,6 +1,7 @@
 import { RangeAvailability } from "@/components/users/schedule/ScheduleModal"
 import { Availability, Event, EventType } from "../types"
 import { useMemo } from "react"
+import { dateInTimezone } from "../utils"
 
 type UseAvailabilityParams = {
   availableTimes: Availability[] | undefined
@@ -22,8 +23,8 @@ const useAvailability = ({availableTimes, et, events} : UseAvailabilityParams) =
       console.log(new Date(a.startTime).getHours())
       console.log(new Date(a.endTime).getHours())
 
-      const startTime = new Date(a.startTime).getHours()
-      const endTime = new Date(a.endTime).getHours()
+      const startTime = dateInTimezone(new Date(a.startTime)).getHours()
+      const endTime = dateInTimezone(new Date(a.endTime)).getHours()
       const absDiff = Math.abs(startTime - endTime)
 
       if (absDiff < 1) continue
@@ -39,8 +40,8 @@ const useAvailability = ({availableTimes, et, events} : UseAvailabilityParams) =
         rangeAvailable = [startHour, endHour]
 
         for (const e of events) {
-          const eStartHour = new Date(e.start.dateTime).getHours()
-          const eEndHour = new Date(e.end.dateTime).getHours()
+          const eStartHour = dateInTimezone(new Date(e.start.dateTime)).getHours()
+          const eEndHour = dateInTimezone(new Date(e.end.dateTime)).getHours()
 
           // Si el nuevo evento se encuentra fuera del tiempo de otros eventos existentes...
           if ((startHour < eStartHour && endHour <= eStartHour) ||
