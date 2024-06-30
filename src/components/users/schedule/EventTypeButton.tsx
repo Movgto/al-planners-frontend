@@ -6,6 +6,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { useMemo } from "react"
 import { useNavigate } from "react-router-dom"
 import { RangeAvailability } from "./ScheduleModal"
+import { dateInTimezoneISO } from "@/utils/index"
 
 type Props = {
   et: EventType
@@ -31,7 +32,7 @@ const EventTypeButton = ({et} : Props) => {
 
   const events = useMemo<EventList | undefined>(() => {
     if (!data || !date) return undefined
-    return useEventsFromDate(data, date.toISOString())
+    return useEventsFromDate(data, dateInTimezoneISO(date))
   }, [data, date])
 
   const availability = useAvailability({availableTimes, et, events})
