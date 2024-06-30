@@ -5,6 +5,7 @@ import {es} from 'date-fns/locale/es'
 import { Availability, CalendarDate } from '@/types/index'
 import { useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
+import { dateInTimezone } from '@/utils/index'
 
 type Props = {
   date: CalendarDate
@@ -56,8 +57,8 @@ const UsersCalendar = ({date, setDate, availableDates, availableTimes} : Props) 
           value={date}
           onChange={handleChange}
           dayOfWeekFormatter={dayOfWeekFormatter}
-          timezone='America/Mexico_City'
-          minDate={new Date(availableDates[0])}          
+          timezone={import.meta.env.VITE_TIMEZONE}
+          minDate={dateInTimezone(new Date(availableDates[0]))}          
           shouldDisableDate={day => {
             
             if (availableDates.includes(day.toDateString())) {
