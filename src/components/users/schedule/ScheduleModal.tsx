@@ -8,7 +8,7 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import ScheduleForm from "./ScheduleForm"
 import { useForm } from "react-hook-form"
-import { formatHourNum } from "@/utils/index"
+import { dateInTimezone, formatHourNum } from "@/utils/index"
 
 export type RangeAvailability = [number?, number?]
 
@@ -71,7 +71,7 @@ const ScheduleModal = () => {
   const handleForm = (formData: ClientEventFormData) => {
     if (!et) return
 
-    const copyDate = new Date(date)
+    const copyDate = dateInTimezone(new Date(date))
 
     copyDate.setHours(0, 0, 0, 0)
 
