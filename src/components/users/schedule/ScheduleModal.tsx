@@ -9,7 +9,6 @@ import { toast } from "react-toastify"
 import ScheduleForm from "./ScheduleForm"
 import { useForm } from "react-hook-form"
 import { dateInTimezone, formatHourNum, getDateInTimezone } from "@/utils/index"
-import {DateTime} from 'luxon'
 
 export type RangeAvailability = [number?, number?]
 
