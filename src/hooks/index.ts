@@ -6,7 +6,7 @@ import { useLocation } from "react-router-dom"
 
 export const useEventsFromDate = (eventList: EventList, isoDate: string) => {
 
-  const date = new Date(isoDate)
+  const date = new Date(new Date(isoDate).toLocaleString('en-US', {timeZone: import.meta.env.VITE_TIMEZONE}))
 
   const year = date.getFullYear()
 
@@ -43,7 +43,7 @@ export const useSelectedDate = () => {
   const date = useMemo(() => {
     if (currentDate) return currentDate
 
-    return new Date()
+    return new Date(new Date().toLocaleString('en-US', {timeZone: import.meta.env.VITE_TIMEZONE}))
   }, [currentDate])
 
   return date
