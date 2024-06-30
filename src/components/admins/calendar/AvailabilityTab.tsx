@@ -1,7 +1,7 @@
 import { deleteAvailableTime, getAvailableTimes } from '@/api/calendarAPI'
 import { useSelectedDate } from '@/hooks/index'
 import { Availability } from '@/types/index'
-import { formatHour } from '@/utils/index'
+import { dateInTimezoneISO, formatHour } from '@/utils/index'
 import { TrashIcon } from '@heroicons/react/24/outline'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
@@ -17,7 +17,7 @@ const AvailabilityTab = () => {
 
   const {data, isLoading, isError, error} = useQuery({
     queryKey: ['availabilityTimes', selectedDate.toISOString()],
-    queryFn: () => getAvailableTimes(selectedDate.toISOString())
+    queryFn: () => getAvailableTimes(dateInTimezoneISO(selectedDate))
   })
 
   const { mutate } = useMutation({
