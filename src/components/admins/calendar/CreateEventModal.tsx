@@ -7,7 +7,7 @@ import { Fragment } from "react"
 import { useForm } from "react-hook-form"
 import { useLocation, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
-import { getDateInTimezone } from "@/utils/index"
+import { dateInTimezone, getDateInTimezone } from "@/utils/index"
 
 const hours = () => {
 	const hoursArray = []
@@ -64,9 +64,9 @@ const CreateEventModal = () => {
 		const eventType = data?.find(et => et._id === formData.eventType)
 
 		if (!selectedDate) {
-			selectedDate = new Date()
+			selectedDate = dateInTimezone(new Date())
 		} else {
-			selectedDate = new Date(selectedDate)
+			selectedDate = dateInTimezone(new Date(selectedDate))
 		}
 
 		console.log(selectedDate.setHours(0,0,0,0))
