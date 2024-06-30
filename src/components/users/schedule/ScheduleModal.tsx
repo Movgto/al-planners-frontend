@@ -8,7 +8,8 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import ScheduleForm from "./ScheduleForm"
 import { useForm } from "react-hook-form"
-import { dateInTimezone, formatHourNum } from "@/utils/index"
+import { dateInTimezone, formatHourNum, getDateInTimezone } from "@/utils/index"
+import {DateTime} from 'luxon'
 
 export type RangeAvailability = [number?, number?]
 
@@ -28,7 +29,7 @@ const ScheduleModal = () => {
 
   const date = useSelectedDate()
 
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient()  
 
   const { data: et, isError, error } = useQuery({
     queryKey: ['eventType', eventType],
@@ -81,10 +82,10 @@ const ScheduleModal = () => {
     const newEvent: EventFormData = {
       summary: et.name,
       start: {
-        dateTime: start.toISOString()
+        dateTime: getDateInTimezone(start.getTime())
       },
       end: {
-        dateTime: end.toISOString()
+        dateTime: getDateInTimezone(end.getTime())
       },
       sentToCalendar: false,
       attendee: formData
