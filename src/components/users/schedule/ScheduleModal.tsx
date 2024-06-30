@@ -75,8 +75,8 @@ const ScheduleModal = () => {
 
     copyDate.setHours(0, 0, 0, 0)
 
-    const start = new Date(copyDate.setHours(newEventTime[0]!))
-    const end = new Date(copyDate.setHours(newEventTime[1]!))
+    const start = dateInTimezone(new Date(copyDate.setHours(newEventTime[0]!)))
+    const end = dateInTimezone(new Date(copyDate.setHours(newEventTime[1]!)))
 
     const newEvent: EventFormData = {
       summary: et.name,
