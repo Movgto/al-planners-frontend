@@ -3,17 +3,18 @@ import { CalendarDate, EventList } from "../types"
 import { useMemo } from "react"
 import { getAuthURL } from "@/api/calendarAPI"
 import { useLocation } from "react-router-dom"
+import { dateInTimezone } from "../utils"
 
 export const useEventsFromDate = (eventList: EventList, isoDate: string) => {
 
-  const date = new Date(new Date(isoDate).toLocaleString('en-US', {timeZone: import.meta.env.VITE_TIMEZONE}))
+  const date = dateInTimezone(new Date(isoDate))
 
   const year = date.getFullYear()
 
   const month = date.getMonth()
   
   return eventList.filter(e => {
-    const eDate = new Date(e.start.dateTime)
+    const eDate =  new Date(e.start.dateTime)
 
     const eMonth = eDate.getMonth()
 
@@ -43,7 +44,7 @@ export const useSelectedDate = () => {
   const date = useMemo(() => {
     if (currentDate) return currentDate
 
-    return new Date(new Date().toLocaleString('en-US', {timeZone: import.meta.env.VITE_TIMEZONE}))
+    return dateInTimezone(new Date())
   }, [currentDate])
 
   return date
