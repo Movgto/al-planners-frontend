@@ -5,15 +5,15 @@ export const classes = (...classes: string[]) => {
 }
 
 export const getDateInTimezone = (timeNumber: number) => {
-  return DateTime.fromISO(new Date(timeNumber).toISOString(), {zone: 'America/Mexico_City'}).toISO()!
+  return DateTime.fromISO(new Date(timeNumber).toISOString(), {zone: import.meta.env.VITE_TIMEZONE}).toISO()!
 }
 
 export const dateInTimezone = (date: Date) => {
-  return new Date(date.toLocaleString('en-US', {timeZone: 'America/Mexico_City'}))
+  return new Date(date.toLocaleString('en-US', {timeZone: import.meta.env.VITE_TIMEZONE}))
 }
 
 export const dateInTimezoneISO = (date: Date) => {
-  return date.toLocaleString('en-US', {timeZone: 'America/Mexico_City'})
+  return date.toLocaleString('en-US', {timeZone: import.meta.env.VITE_TIMEZONE})
 }
 
 export const formatHour = (isoDate: string) => {
