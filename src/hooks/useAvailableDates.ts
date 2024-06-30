@@ -1,11 +1,12 @@
 import { useMemo } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { getAllAvailableTimes } from "@/api/calendarAPI"
+import { dateInTimezone, dateInTimezoneISO } from "../utils"
 
 const useAvailableDates = () => {
   const {data: availableTimes} = useQuery({
     queryKey: ['allAvailableTimes'],
-    queryFn: () => getAllAvailableTimes(new Date().toISOString())
+    queryFn: () => getAllAvailableTimes(dateInTimezoneISO(new Date()))
   })
 
   const availableDates = useMemo(() => {
@@ -16,7 +17,7 @@ const useAvailableDates = () => {
     if (!availableTimes.length) return []
 
     const availableDates = availableTimes.map(a => {
-      const date = new Date(a.startTime)
+      const date = dateInTimezone(new Date(a.startTime))
 
       date.setHours(0,0,0,0)
 
