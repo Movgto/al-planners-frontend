@@ -38,7 +38,7 @@ const Calendar = ({date, setDate} : CalendarProps) => {
     const currentMonth = date.getMonth()
 
     for (let et of eventList) {
-      const eventDate = new Date(et.start.dateTime)
+      const eventDate = dateInTimezone(new Date(et.start.dateTime))
       const year = eventDate.getFullYear()
       const month = eventDate.getMonth()
       
@@ -62,9 +62,9 @@ const Calendar = ({date, setDate} : CalendarProps) => {
 
 
     for (const a of availableTimes) {
-      const year = new Date(a.startTime).getFullYear()
-      const month = new Date(a.startTime).getMonth()
-      const day = new Date(a.startTime).getDate()
+      const year = dateInTimezone(new Date(a.startTime)).getFullYear()
+      const month = dateInTimezone(new Date(a.startTime)).getMonth()
+      const day = dateInTimezone(new Date(a.startTime)).getDate()
       
       console.log('====== Year of time available ======')
       console.log(year)
