@@ -1,7 +1,7 @@
 import { deleteAvailableTime, getAvailableTimes } from '@/api/calendarAPI'
 import { useSelectedDate } from '@/hooks/index'
 import { Availability } from '@/types/index'
-import { dateInTimezone, dateInTimezoneISO, formatHour } from '@/utils/index'
+import { dateInTimezone, formatHour } from '@/utils/index'
 import { TrashIcon } from '@heroicons/react/24/outline'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
