@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { ParallaxBanner } from 'react-scroll-parallax'
 import ALLogoBlack from '@/images/logos/al_logo_black.png'
 import { collageData } from '@/utils/presentation'
+import { classes } from '@/utils/index'
 
 const UsersHomeView = () => {
 
@@ -24,13 +25,10 @@ const UsersHomeView = () => {
               <ShowOnScreen
                 transitionInClasses={`duration-500 translate-y-0 opacity-100 delay-[${100 + 200 * index}ms] ease-out]`}
                 transitionOutClasses='duration-200 -translate-y-2 opacity-0'
-                extraClasses={`w-60 h-60`}
-              >
-                <img
-                  alt={`collage photo ${index + 1}`}
-                  src={data.url}
-                />
-              </ShowOnScreen>
+                extraClasses={classes(`bg-cover bg-no-repeat bg-center w-60 h-60`,
+                  `bg-[url("${data.url}")]`
+                )}
+              />
             )
           }
           )}
@@ -45,8 +43,10 @@ const UsersHomeView = () => {
               <ShowOnScreen
                 transitionInClasses={`duration-500 translate-y-0 opacity-100 delay-[${100 + 200 * index}ms] ease-out]`}
                 transitionOutClasses='duration-200 -translate-y-2 opacity-0'
-                extraClasses={`bg-[url("${data.url}")] bg-center bg-cover bg-no-repeat w-60 h-60`}
-              />
+                extraClasses={classes(`bg-cover bg-no-repeat bg-center w-60 h-60`,
+                  `bg-[url("${data.url}")]`
+                )}
+              />                
             )
           }
           )}
