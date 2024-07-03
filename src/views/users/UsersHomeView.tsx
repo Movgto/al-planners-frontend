@@ -21,12 +21,14 @@ const UsersHomeView = () => {
 
             if (index > 3) return null
 
+            const bgClass = `bg-[url("${data.url}")]`
+
             return (
               <ShowOnScreen
                 transitionInClasses={`duration-500 translate-y-0 opacity-100 delay-[${100 + 200 * index}ms] ease-out]`}
                 transitionOutClasses='duration-200 -translate-y-2 opacity-0'
                 extraClasses={classes(`bg-cover bg-no-repeat bg-center w-60 h-60`,
-                  `bg-[url("${data.url}")]`
+                  bgClass
                 )}
               />
             )
@@ -39,12 +41,14 @@ const UsersHomeView = () => {
           {collageData.map((data, index) => {
             if (index < 4) return null
 
+            const bgClass = `bg-[url("${data.url}")]`
+
             return (
               <ShowOnScreen
                 transitionInClasses={`duration-500 translate-y-0 opacity-100 delay-[${100 + 200 * index}ms] ease-out]`}
                 transitionOutClasses='duration-200 -translate-y-2 opacity-0'
                 extraClasses={classes(`bg-cover bg-no-repeat bg-center w-60 h-60`,
-                  `bg-[url("${data.url}")]`
+                  bgClass
                 )}
               />                
             )
