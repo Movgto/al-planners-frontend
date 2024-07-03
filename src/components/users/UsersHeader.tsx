@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { Link, useLocation } from "react-router-dom"
-import ALLogo from '@/images/logos/al_logo_circle_white.png'
 
 const tabs = [
   {
