@@ -7,9 +7,10 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        playwrite: ["Playwrite NZ", "sans-serif"]
+        playwrite: ["Playwrite NZ", "sans-serif"],
+        lora: ["Lora", "sans-serif"]
       }
-    },
+    }    
   },
   plugins: [
     require('@tailwindcss/forms')
