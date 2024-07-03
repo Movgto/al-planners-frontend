@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom'
 import { ParallaxBanner } from 'react-scroll-parallax'
 import ALLogoBlack from '@/images/logos/al_logo_black.png'
 import { collageData } from '@/utils/presentation'
-import { classes } from '@/utils/index'
 
 const UsersHomeView = () => {
 
@@ -21,16 +20,18 @@ const UsersHomeView = () => {
 
             if (index > 3) return null
 
-            const bgClass = `bg-[url("${data.url}")]`
-
             return (
               <ShowOnScreen
                 transitionInClasses={`duration-500 translate-y-0 opacity-100 delay-[${100 + 200 * index}ms] ease-out]`}
                 transitionOutClasses='duration-200 -translate-y-2 opacity-0'
-                extraClasses={classes(`bg-cover bg-no-repeat bg-center w-60 h-60`,
-                  bgClass
-                )}
-              />
+                extraClasses="bg-cover bg-no-repeat bg-center w-60 h-60"
+              >
+                <img
+                  alt={`collage photo ${index + 1}`}
+                  src={data.url}
+                  className='object-cover object-center w-full h-full'
+                />
+              </ShowOnScreen>
             )
           }
           )}
@@ -39,18 +40,20 @@ const UsersHomeView = () => {
           className='absolute top-0 right-0 hidden lg:grid grid-cols-1 grid-flow-row opacity-50 '
         >
           {collageData.map((data, index) => {
-            if (index < 4) return null
-
-            const bgClass = `bg-[url("${data.url}")]`
+            if (index < 4) return null            
 
             return (
               <ShowOnScreen
                 transitionInClasses={`duration-500 translate-y-0 opacity-100 delay-[${100 + 200 * index}ms] ease-out]`}
                 transitionOutClasses='duration-200 -translate-y-2 opacity-0'
-                extraClasses={classes(`bg-cover bg-no-repeat bg-center w-60 h-60`,
-                  bgClass
-                )}
-              />                
+                extraClasses="bg-cover bg-no-repeat bg-center w-60 h-60"
+              >
+                <img
+                  alt={`collage photo ${index + 1}`}
+                  src={data.url}
+                  className='object-cover object-center w-full h-full'
+                />
+              </ShowOnScreen>
             )
           }
           )}
@@ -118,8 +121,14 @@ const UsersHomeView = () => {
           <ShowOnScreen
             transitionInClasses={`duration-500 translate-y-0 opacity-100 delay-[${100 + 200 * index}ms] ease-out]`}
             transitionOutClasses='duration-200 -translate-y-2 opacity-0'
-            extraClasses={`bg-[url("${data.url}")] bg-center bg-cover bg-no-repeat w-40 h-40 lg:w-60 lg:h-60`}
-          />
+            extraClasses="bg-cover bg-no-repeat bg-center w-60 h-60"
+          >
+            <img
+              alt={`collage 2 photo ${index + 1}`}
+              src={data.url}
+              className='object-cover object-center w-full h-full'
+            />
+          </ShowOnScreen>
         ))}
       </div>
       <section
