@@ -106,7 +106,7 @@ const Slider = ({sliderContent} : Props) => {
       >
       </div>
       <div
-        className={classes("transition flex flex-col w-full gap-5 px-10 justify-center lg:items-center lg:justify-center lg:flex-row bg-zinc-600/60 text-white font-lora shadow-xl z-10",
+        className={classes("transition flex flex-col w-full gap-5 px-10 py-2 justify-center lg:items-center lg:justify-center lg:flex-row bg-zinc-600/60 text-white font-lora shadow-xl z-10",
           isTransitioning.transitioning ? 'duration-200 opacity-0 ease-in' : 'duration-300 delay-200 opacity-100 ease-out'
         )}
       >
