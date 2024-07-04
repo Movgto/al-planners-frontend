@@ -2,7 +2,6 @@ import { SliderContent } from "@/utils/presentation"
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline"
 import { useEffect, useRef, useState } from "react"
 import { ParallaxBanner } from "react-scroll-parallax"
-import ShowOnScreen from "./ShowOnScreen"
 import { classes } from "@/utils/index"
 
 type Props = {
