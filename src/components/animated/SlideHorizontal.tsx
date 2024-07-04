@@ -1,5 +1,5 @@
 import { classes } from "@/utils/index"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef } from "react"
 
 type Props = {
   extraClasses?: string
