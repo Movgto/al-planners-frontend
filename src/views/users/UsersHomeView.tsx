@@ -166,7 +166,7 @@ const UsersHomeView = () => {
           </ShowOnScreen>
           <ShowOnScreen
             extraClasses='flex flex-nowrap overflow-x-clip justify-center'
-            transitionInClasses='duration-700 w-full ease-out opacity-100 delay-[1200ms]'
+            transitionInClasses='duration-700 w-full ease-out opacity-100 delay-[800ms]'
             transitionOutClasses='duration-200 opacity-0 w-0 ease-in'
           >
             <h2 className='font-lora text-2xl text-justify text-zinc-800 p-2'>Si quieres saber más sobre la boda de tus sueños...</h2>
@@ -180,7 +180,7 @@ const UsersHomeView = () => {
           </ShowOnScreen>
           <ShowOnScreen
             extraClasses='flex flex-nowrap overflow-x-clip justify-center'
-            transitionInClasses='duration-700 scale-100 ease-out opacity-100 delay-[2100ms]'
+            transitionInClasses='duration-700 scale-100 ease-out opacity-100 delay-[1000ms]'
             transitionOutClasses='duration-200 scale-50 opacity-0 ease-in'
           >
             <Link
