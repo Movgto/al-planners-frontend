@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { Link, useLocation } from "react-router-dom"
+import UsersPopMenu from "./UsersPopMenu"
 
 const tabs = [
   {
@@ -11,6 +12,8 @@ const tabs = [
     href: '/schedule'
   }
 ]
+
+export type PopmenuOpts = typeof tabs
 
 const UsersHeader = () => {
   const scrollPosRef = useRef(window.scrollY)
@@ -46,7 +49,7 @@ const UsersHeader = () => {
 
   return (
     <header
-      className={classes("fixed transition px-1 w-full flex justify-center z-[20]",
+      className={classes("fixed transition px-1 w-full flex justify-center z-[20] overflow-y-visible",
         location.pathname === '/schedule' ? '' : '',
         'duration-100 bg-zinc-800 text-white opacity-100 ease-out',
         !isOnTop && scrollingDown ? '-translate-y-20 duration-300 ease-out' : '',
@@ -54,7 +57,7 @@ const UsersHeader = () => {
       )}
     >
       <nav
-        className="w-full max-w-5xl flex justify-between gap-2 text-lg font-semibold font-lora"
+        className="w-full max-w-5xl flex items-center justify-center lg:justify-between gap-4 text-lg font-semibold font-lora"
       >
         <div
           className={classes("bg-[url('/src/images/logos/al_logo_circle_white.png')]",
@@ -63,7 +66,7 @@ const UsersHeader = () => {
         >          
         </div>
         <div
-          className="flex justify-center gap-4"
+          className="hidden lg:flex justify-center gap-4"
         >
           {tabs.map(tab => (
 
@@ -73,7 +76,10 @@ const UsersHeader = () => {
             ><p>{tab.title}</p></Link>
           ))}
         </div>
-        <div></div>
+        <UsersPopMenu opts={tabs}/>
+        <div
+          className="hidden lg:block"
+        ></div>
       </nav>
     </header>
   )
