@@ -27,7 +27,7 @@ const UsersHeader = () => {
   }
 
   const handleScroll = useCallback(() => {
-    const newScrollPos = window.scrollY    
+    const newScrollPos = window.scrollY
     scrollingDownRef.current = newScrollPos > scrollPosRef.current
     scrollPosRef.current = newScrollPos
 
@@ -59,12 +59,15 @@ const UsersHeader = () => {
       <nav
         className="w-full max-w-5xl flex items-center justify-center lg:justify-between gap-4 text-lg font-semibold font-lora"
       >
-        <div
-          className={classes("bg-[url('/src/images/logos/al_logo_circle_white.png')]",
-            "w-10 h-10 bg-contain bg-center bg-no-repeat border rounded-full m-1"
-          )}
-        >          
-        </div>
+        <Link
+          to="/"
+        >
+          <div
+            className={classes("bg-[url('/src/images/logos/al_logo_circle_white.png')]",
+              "w-10 h-10 bg-contain bg-center bg-no-repeat border rounded-full m-1"
+            )}
+          ></div>
+        </Link>
         <div
           className="hidden lg:flex justify-center gap-4"
         >
@@ -76,12 +79,12 @@ const UsersHeader = () => {
             ><p>{tab.title}</p></Link>
           ))}
         </div>
-        <UsersPopMenu opts={tabs}/>
+        <UsersPopMenu opts={tabs} />
         <div
           className="hidden lg:block"
         ></div>
       </nav>
-    </header>
+    </header >
   )
 }
 
