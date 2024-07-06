@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { Link, useLocation } from "react-router-dom"
-import UsersPopMenu from "./UsersPopMenu"
+// import UsersPopMenu from "./UsersPopMenu"
 
 const tabs = [
   {
@@ -73,7 +73,7 @@ const UsersHeader = () => {
           ></div>
         </Link>
         <div
-          className="hidden lg:flex justify-center gap-4"
+          className="flex justify-center gap-4"
         >
           {tabs.map(tab => (
 
@@ -83,7 +83,7 @@ const UsersHeader = () => {
             ><p>{tab.title}</p></Link>
           ))}
         </div>
-        <UsersPopMenu opts={tabs} />
+        {/**<UsersPopMenu opts={tabs} />**/}
         <div
           className="hidden lg:block"
         ></div>
