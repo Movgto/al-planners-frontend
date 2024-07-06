@@ -1,11 +1,10 @@
 import ShowOnScreen from '@/components/animated/ShowOnScreen'
 import '@/styles/landpage.css'
-import { Link } from 'react-router-dom'
 import ALLogoBlack from '@/images/logos/al_logo_black.png'
-import ALCircleBlack from '@/images/logos/al_logo_circle_black.png'
 import { collageData, sliderContent } from '@/utils/presentation.tsx'
 import SlideHorizontal from '@/components/animated/SlideHorizontal'
 import Slider from '@/components/animated/Slider'
+import ContactSection from '@/components/users/ContactSection'
 
 const UsersHomeView = () => {
 
@@ -146,72 +145,7 @@ const UsersHomeView = () => {
         />
       </section>
 
-      <ShowOnScreen
-        extraClasses='w-full flex justify-center items-center min-h-screen'
-        transitionInClasses='duration-500 opacity-100 scale-x-100 ease-out'
-        transitionOutClasses='duration-200 opacity-0 scale-x-50 ease-in'
-      >
-        <div className='w-full bg-white border-zinc-800 border-y-2
-                        py-20 flex flex-col items-center gap-10 z-10'
-        >
-          <ShowOnScreen
-            transitionInClasses='translate-y-0 opacity-100 ease-out duration-500 delay-[300ms]'
-            transitionOutClasses='-translate-y-4 opacity-0 ease-in duration-200'
-          >
-            <img
-              alt="schedule al logo"
-              src={ALCircleBlack}
-              className='object-contain w-40'
-            />
-          </ShowOnScreen>
-          <ShowOnScreen
-            extraClasses='flex flex-nowrap overflow-x-clip justify-center'
-            transitionInClasses='duration-700 w-full ease-out opacity-100 delay-[800ms]'
-            transitionOutClasses='duration-200 opacity-0 w-0 ease-in'
-          >
-            <h2 className='font-lora text-2xl text-justify text-zinc-800 p-2'>Si quieres saber más sobre la boda de tus sueños...</h2>
-          </ShowOnScreen>
-          <ShowOnScreen
-            extraClasses='flex flex-nowrap overflow-x-clip justify-center'
-            transitionInClasses='duration-700 w-full ease-out opacity-100 delay-[500ms]'
-            transitionOutClasses='duration-200 opacity-0 w-0 ease-in'
-          >
-            <hr className='border border-[#d0c383] w-1/2' />
-          </ShowOnScreen>
-          <ShowOnScreen
-            extraClasses='flex flex-nowrap overflow-x-clip justify-center'
-            transitionInClasses='duration-700 scale-100 ease-out opacity-100 delay-[1000ms]'
-            transitionOutClasses='duration-200 scale-50 opacity-0 ease-in'
-          >
-            <Link
-              to="/schedule"
-              className='font-lora bg-zinc-600 hover:cursor-pointer hover:bg-white
-                      transition hover:text-zinc-800 py-2 px-4 text-white font-bold text-2xl'
-            >Agendar Cita</Link>
-          </ShowOnScreen>
-
-          
-          
-        </div>
-      </ShowOnScreen>
-
-      <section
-        id="contact"
-        className='text-xl px-4 py-6'
-      >
-        <h3 className='font-bold'>Estaremos encantados de trabajar en tu evento!</h3>
-
-        <p>Si deseas conocer mas detalles sobre nuestro trabajo no dudes en contactarte con nosotros.</p>
-
-        <div className='flex gap-4 my-4'>
-          <a rel="noopener" target='_blank' href="https://wa.me/5218122011621" className='hover:underline'>
-            <i className='fa-brands fa-whatsapp text-2xl'></i> 812 201 1621
-          </a>
-          <a rel="noopener" target='_blank' href="https://www.instagram.com/al_planners" className='hover:underline'>
-            <i className='fa-brands fa-instagram text-2xl'></i> @al_planners
-          </a>
-        </div>
-      </section>
+      <ContactSection />      
     </>
   )
 }
