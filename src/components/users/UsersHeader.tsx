@@ -6,11 +6,15 @@ const tabs = [
   {
     title: 'Inicio',
     href: '/'
+  },  
+  {
+    title: 'Redes Sociales',
+    href: '/redes'
   },
   {
-    title: 'Agendar Cita',
-    href: '/schedule'
-  }
+    title: 'Contacto',
+    href: '/contacto'
+  },
 ]
 
 export type PopmenuOpts = typeof tabs
