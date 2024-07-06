@@ -7,6 +7,9 @@ import UsersHomeView from "@/views/users/UsersHomeView"
 import ScheduleView from "./views/users/ScheduleView"
 import AdminsAuthLayout from "./layouts/admins/AdminsAuthLayout"
 import AdminsLoginView from "./views/admins/auth/AdminsLoginView"
+import SocialMediaView from "./views/users/SocialMediaView"
+import ContactView from "./views/users/ContactView"
+import NotFound from "./views/NotFound"
 
 const Router = () => {
   return (
@@ -14,7 +17,9 @@ const Router = () => {
       <Routes>
         <Route path='/' element={<AppLayout />}>
           <Route index element={<UsersHomeView />} />
-          <Route path="schedule" element={<ScheduleView />} />
+          <Route path="agendar" element={<ScheduleView />} />
+          <Route path="redes" element={<SocialMediaView />} />
+          <Route path="contacto" element={<ContactView />} />
         </Route>
         <Route path='admins' element={<AdminsLayout />}>
           <Route index element={<HomeView />} />
@@ -23,6 +28,7 @@ const Router = () => {
         <Route path='auth/admins' element={<AdminsAuthLayout />}>
           <Route path="login" element={<AdminsLoginView />} />
         </Route>
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   )
