@@ -33,7 +33,9 @@ const ScheduleModal = () => {
   const { data: et, isError, error } = useQuery({
     queryKey: ['eventType', eventType],
     queryFn: () => getEventType(eventType!),
-    enabled: !!eventType
+    enabled: !!eventType,
+    refetchOnWindowFocus: false,
+    retry: 3
   })
 
   const { data: availability } = useQuery({
@@ -41,7 +43,9 @@ const ScheduleModal = () => {
     queryFn: () => {
       return queryClient.getQueryData<RangeAvailability[]>(['availability', date.toISOString() + et!._id])
     },
-    enabled: !!eventType
+    enabled: !!eventType,
+    refetchOnWindowFocus: false,
+    retry: 3
   })
 
   const handleClick = (range: RangeAvailability) => {
