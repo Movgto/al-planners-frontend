@@ -5,6 +5,7 @@ const useAdmin = () => {
   const queryData = useQuery({
     queryKey: ['admin'],
     queryFn: getAdmin,
+    refetchOnWindowFocus: false,
     retry: 1
   })
 
