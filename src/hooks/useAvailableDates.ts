@@ -6,7 +6,9 @@ import { dateInTimezone } from "../utils"
 const useAvailableDates = () => {
   const {data: availableTimes} = useQuery({
     queryKey: ['allAvailableTimes'],
-    queryFn: () => getAllAvailableTimes(dateInTimezone(new Date()).toISOString())
+    queryFn: () => getAllAvailableTimes(dateInTimezone(new Date()).toISOString()),
+    refetchOnWindowFocus: false,
+    retry: 3
   })
 
   const availableDates = useMemo(() => {
