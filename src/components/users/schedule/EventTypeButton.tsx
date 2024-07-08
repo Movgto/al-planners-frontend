@@ -22,7 +22,9 @@ const EventTypeButton = ({et} : Props) => {
 
   const { data: availableTimes } = useQuery({
     queryKey: ['availableTimes', date],
-    queryFn: () => getAvailableTimes(date.toISOString())
+    queryFn: () => getAvailableTimes(date.toISOString()),
+    refetchOnWindowFocus: false,
+    retry: 3
   })
 
   const { data } = useQuery({
