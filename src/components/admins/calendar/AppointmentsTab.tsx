@@ -10,7 +10,9 @@ const AppointmentsTab = () => {
 
     const {data, isError, error, isLoading} = useQuery({
         queryKey: ['eventTypes'],
-        queryFn: getEventTypes,        
+        queryFn: getEventTypes,
+        refetchOnWindowFocus: false,
+        retry: 3     
     })
 
     if (isLoading) {
