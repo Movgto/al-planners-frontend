@@ -24,12 +24,16 @@ const Calendar = ({date, setDate} : CalendarProps) => {
   const {data, isLoading, isError, error} = useQuery({
     queryKey: ['calendarEvents'],
     queryFn: getEvents,
+    refetchOnWindowFocus: false,
+    retry: 3
   })
 
   const {data: availableTimes} = useQuery({
     queryKey: ['availableTimes'],
     queryFn: () => getAllAvailableTimes(date!.toISOString()),
-    enabled: !!date
+    enabled: !!date,
+    refetchOnWindowFocus: false,
+    retry: 3
   })
 
   const getHighlightedDays = (date: Date, eventList: EventList) => {
