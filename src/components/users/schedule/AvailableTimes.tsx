@@ -6,7 +6,9 @@ const AvailableTimes = () => {
 
   const {data: eventTypes} = useQuery({
     queryKey: ['eventTypes'],
-    queryFn: getEventTypes
+    queryFn: getEventTypes,
+    refetchOnWindowFocus: false,
+    retry: 3
   })
 
   if (eventTypes && eventTypes.length) return (
