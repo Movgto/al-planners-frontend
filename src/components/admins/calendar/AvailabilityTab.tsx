@@ -17,7 +17,9 @@ const AvailabilityTab = () => {
 
   const {data, isLoading, isError, error} = useQuery({
     queryKey: ['availabilityTimes', selectedDate.toISOString()],
-    queryFn: () => getAvailableTimes(dateInTimezone(selectedDate).toISOString())
+    queryFn: () => getAvailableTimes(dateInTimezone(selectedDate).toISOString()),
+    refetchOnWindowFocus: false,
+    retry: 3
   })
 
   const { mutate } = useMutation({
