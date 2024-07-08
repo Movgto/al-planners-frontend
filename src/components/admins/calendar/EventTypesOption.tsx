@@ -13,7 +13,9 @@ const EventTypesOption = ({setOption} : AppointmentMenuOptionProps) => {
 
   const {data} = useQuery({
     queryKey: ['eventTypes'],
-    queryFn: getEventTypes,        
+    queryFn: getEventTypes,
+    refetchOnWindowFocus: false,
+    retry: 3
   })
 
   const {mutate} = useMutation({
