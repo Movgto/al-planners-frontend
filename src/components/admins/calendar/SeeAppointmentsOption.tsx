@@ -1,16 +1,23 @@
 import { getEvents, syncEvents } from "@/api/calendarAPI"
 import { AppointmentMenuOptionProps, EventList } from "@/types/index"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import AppointmenstList from "./AppointmenstList"
 import { useAuthUrl, useGApiCode, useSelectedDate } from "@/hooks/index"
 import { toast } from "react-toastify"
+import { useEffect } from "react"
 
 const SeeAppointmentsOption = ({setOption} : AppointmentMenuOptionProps) => {
 
   const navigate = useNavigate()
 
   const queryClient = useQueryClient()
+
+  const location = useLocation()
+
+  const searchParams = new URLSearchParams(location.search)
+
+  const codeFromPath = searchParams.get('code')
 
   const code = useGApiCode()
 
@@ -52,6 +59,13 @@ const SeeAppointmentsOption = ({setOption} : AppointmentMenuOptionProps) => {
     if (!code) return
     mutate(code)
   }
+
+  useEffect(() => {
+    if (!codeFromPath) return
+
+    localStorage.setItem('GOOGLE_API_TOKEN', codeFromPath)
+    navigate(location.pathname)
+  }, [codeFromPath])
 
   if (data) return (
     <div
