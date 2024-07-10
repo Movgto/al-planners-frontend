@@ -35,7 +35,10 @@ const SeeAppointmentsOption = ({setOption} : AppointmentMenuOptionProps) => {
 
   const { mutate } = useMutation({
     mutationFn: syncEvents,
-    onError: error => toast.error(error.message),
+    onError: error => {
+      localStorage.removeItem('GOOGLE_API_TOKEN')
+      toast.error(error.message)
+    },
     onSuccess: data => {
       queryClient.invalidateQueries({queryKey: ['calendarEvents']})
       toast.success(data)
