@@ -1,6 +1,8 @@
 const HomeView = () => {
   return (
-    <div>
+    <div
+      className="py-60"
+    >
       HomeView
     </div>
   )
