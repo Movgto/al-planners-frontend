@@ -32,7 +32,10 @@ const AppointmenstList = ({eventList, isoDate} : AppointmenstListProps) => {
 
   const { mutate } = useMutation({
     mutationFn: deleteEvent,
-    onError: error => toast.error(error.message),
+    onError: error => {
+      localStorage.removeItem('GOOGLE_API_TOKEN')
+      toast.error(error.message)
+    },
     onSuccess: data => {
       queryClient.invalidateQueries({queryKey: ['calendarEvents']})
       toast.success(data)
