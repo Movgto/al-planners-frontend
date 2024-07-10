@@ -172,7 +172,7 @@ const Calendar = ({date, setDate} : CalendarProps) => {
     setHighlightedDays(getHighlightedDays(date, data))
     if (!availableTimes) return
     setOpenDays(getOpenDays(date, availableTimes))
-  }, [data])
+  }, [data, availableTimes])
 
   if (isLoading) return 'Cargando eventos'
 
