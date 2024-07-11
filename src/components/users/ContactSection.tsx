@@ -40,18 +40,18 @@ const ContactSection = () => {
           extraClasses='flex flex-col lg:flex-row gap-4 justify-center'
           transitionInClasses='duration-700 scale-100 ease-out opacity-100 delay-[1000ms]'
           transitionOutClasses='duration-200 scale-50 opacity-0 ease-in'
-        >
-          <Link
-            to="/agendar"
-            className='font-lora bg-zinc-600 hover:cursor-pointer hover:bg-white
-                      transition hover:text-zinc-800 py-2 px-4 text-white text-center font-bold text-2xl'
-          >Agendar Cita</Link>
+        >          
           <Link
             to="https://wa.me/5218122011621"
             target='_blank'
             className='font-lora bg-zinc-600 hover:cursor-pointer hover:bg-white
                       transition hover:text-zinc-800 py-2 px-4 text-white text-center font-bold text-2xl'
           >Más Información</Link>
+          <Link
+            to="/agendar"
+            className='font-lora bg-zinc-600 hover:cursor-pointer hover:bg-white
+                      transition hover:text-zinc-800 py-2 px-4 text-white text-center font-bold text-2xl'
+          >Agendar Cita</Link>
         </ShowOnScreen>
       </div>
     </ShowOnScreen>
