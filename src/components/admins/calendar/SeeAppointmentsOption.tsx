@@ -37,6 +37,7 @@ const SeeAppointmentsOption = ({setOption} : AppointmentMenuOptionProps) => {
     mutationFn: syncEvents,
     onError: error => {
       localStorage.removeItem('GOOGLE_API_TOKEN')
+      navigate(location.pathname)
       toast.error(error.message)
     },
     onSuccess: data => {
