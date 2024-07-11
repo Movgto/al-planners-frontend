@@ -69,5 +69,7 @@ export const useGApiCode = () => {
     return localStorage.getItem('GOOGLE_API_TOKEN')
   }, [codeFromPath])
 
+  console.log(code)
+
   return code
 } 
