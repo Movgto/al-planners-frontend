@@ -46,6 +46,13 @@ const AppointmenstList = ({ eventList, isoDate }: AppointmenstListProps) => {
     mutate({ code: code || 'asdasdasd', eventId })
   }
 
+  const displayNames = (e: Event) => {
+    const name1 = e.attendees[0].name.split(' ')[0]
+    const name2 = e.attendees[1].name.split(' ')[0]
+
+    return name1 + ' & ' + name2
+  }
+
   return (
     <ul
       className="flex flex-col gap-2"
@@ -56,6 +63,10 @@ const AppointmenstList = ({ eventList, isoDate }: AppointmenstListProps) => {
             "rounded-md border border-slate-400 font-semibold",
             "flex relative pr-14 group hover:border-slate-600 hover:cursor-pointer")}
         >
+          <p
+            className="text-sm text-slate-800 font-semibold"
+          >{displayNames(e)}</p>
+
           <div
             className="flex w-full justify-between items-center p-2 z-10"
             onClick={() => handleClick(e._id)}
