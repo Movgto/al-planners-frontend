@@ -37,10 +37,10 @@ export const eventSchema = z.object({
     dateTime: z.string()    
   }),
   sentToCalendar: z.boolean(),
-  attendee: z.object({
+  attendees: z.array(z.object({
     name: z.string(),
     email: z.string()
-  })
+  })) 
 })
 
 export const eventListSchema = z.array(eventSchema)
@@ -49,10 +49,11 @@ export type EventList = z.infer<typeof eventListSchema>
 
 export type Event = z.infer<typeof eventSchema>
 
-export type EventFormData = Pick<Event, 'summary'|'start'|'end'|'sentToCalendar'|'attendee'>
+export type EventFormData = Pick<Event, 'summary'|'start'|'end'|'sentToCalendar'|'attendees'>
 
 export type ClientEventFormData = {
-  name: string
+  name1: string
+  name2: string
   email: string
 }
 
