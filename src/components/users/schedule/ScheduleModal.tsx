@@ -66,7 +66,8 @@ const ScheduleModal = () => {
   })
 
   const defaultValues: ClientEventFormData = {
-    name: '',
+    name1 : '',
+    name2 : '',
     email: ''
   }
 
@@ -91,7 +92,16 @@ const ScheduleModal = () => {
         dateTime: getDateInTimezone(end.getTime())
       },
       sentToCalendar: false,
-      attendee: formData
+      attendees: [
+        {
+          name: formData.name1,
+          email: formData.email
+        },
+        {
+          name: formData.name2,
+          email: formData.email
+        }
+      ]
     }
 
     mutate(newEvent)
