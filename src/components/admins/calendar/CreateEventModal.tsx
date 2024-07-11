@@ -22,7 +22,8 @@ const hours = () => {
 const defaultValues = {
 	eventType: '',
 	startTime: '',
-	attendeeName: '',
+	attendeeName1: '',
+	attendeeName2: '',
 	attendeeEmail: ''
 }
 
@@ -50,7 +51,7 @@ const CreateEventModal = () => {
 		onError: error => toast.error(error.message),
 		onSuccess: data => {
 			toast.success(data)
-			queryClient.invalidateQueries({queryKey: ['calendarEvents']})
+			queryClient.invalidateQueries({ queryKey: ['calendarEvents'] })
 			reset()
 			navigate(location.pathname, { replace: true })
 		}
@@ -71,7 +72,7 @@ const CreateEventModal = () => {
 			selectedDate = dateInTimezone(new Date(selectedDate))
 		}
 
-		console.log(selectedDate.setHours(0,0,0,0))
+		console.log(selectedDate.setHours(0, 0, 0, 0))
 
 		console.log(selectedDate)
 
@@ -89,10 +90,16 @@ const CreateEventModal = () => {
 				dateTime: getDateInTimezone(selectedDate.setHours(+formData.startTime + eventType.duration))
 			},
 			sentToCalendar: false,
-			attendee: {
-				name: formData.attendeeName,
-				email: formData.attendeeEmail
-			}
+			attendees: [
+				{
+					name: formData.attendeeName1,
+					email: formData.attendeeEmail
+				},
+				{
+					name: formData.attendeeName2,
+					email: formData.attendeeEmail
+				}
+			]
 		}
 
 		mutate(event)
@@ -212,24 +219,51 @@ const CreateEventModal = () => {
 										)}
 									</div>
 
+									<h3
+										className="text-lg text-slate-700 font-bold"
+									>Quienes se casan?</h3>
+
 									<div
-										className="flex flex-col gap-2"
+										className="flex flex-col gap-2 pl-4"
 									>
-										<label
-											htmlFor="attendeeName"
-											className="text-slate-600 font-semibold"
-										>Nombre de participante</label>
-										<input
-											id="attendeeName"
-											type="text"
-											{...register('attendeeName', {
-												required: 'Este campo es obligatorio'
-											})}
-										/>
-										{errors.attendeeName && errors.attendeeName.message && (
-											<ErrorMessage message={errors.attendeeName.message} />
-										)}
+										<div
+											className="flex flex-col gap-2"
+										>
+											<label
+												htmlFor="attendeeName1"
+												className="text-slate-600 font-semibold"
+											>Nombre completo 1</label>
+											<input
+												id="attendeeName1"
+												type="text"
+												{...register('attendeeName1', {
+													required: 'Este campo es obligatorio'
+												})}
+											/>
+											{errors.attendeeName1 && errors.attendeeName1.message && (
+												<ErrorMessage message={errors.attendeeName1.message} />
+											)}
+										</div>
+										<div
+											className="flex flex-col gap-2"
+										>
+											<label
+												htmlFor="attendeeName2"
+												className="text-slate-600 font-semibold"
+											>Nombre completo 2</label>
+											<input
+												id="attendeeName2"
+												type="text"
+												{...register('attendeeName2', {
+													required: 'Este campo es obligatorio'
+												})}
+											/>
+											{errors.attendeeName2 && errors.attendeeName2.message && (
+												<ErrorMessage message={errors.attendeeName2.message} />
+											)}
+										</div>
 									</div>
+
 
 									<div
 										className="flex flex-col gap-2"
