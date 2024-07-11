@@ -84,25 +84,27 @@ const AppointmentModal = () => {
                 >
                   {data.summary}
                 </p>
-                <div
-                  className="flex flex-col gap-2 text-left w-full text-xl"
-                >
-                  <p
-                    className="flex justify-between"
-                  >
-                    <span
-                      className="font-bold"
-                    >Nombre de participante:</span> <span>{data.attendee.name}</span>
-                  </p>
-                  <p
-                    className="flex justify-between"
-                  >
-                    <span
-                      className="font-bold"
-                    >Correo electrónico de participante:</span> <span>{data.attendee.email}</span>
-                  </p>
-                </div>
 
+                {data.attendees.map((at, idx) => (
+                  <div
+                    className="flex flex-col gap-2 text-left w-full text-xl"
+                  >
+                    <p
+                      className="flex justify-between"
+                    >
+                      <span
+                        className="font-bold"
+                      >Nombre de participante {idx + 1}:</span> <span>{at.name}</span>
+                    </p>
+                    <p
+                      className="flex justify-between"
+                    >
+                      <span
+                        className="font-bold"
+                      >Correo electrónico de participante:</span> <span>{at.email}</span>
+                    </p>
+                  </div>
+                ))}                
               </DialogPanel>
             </TransitionChild>
           </div>
