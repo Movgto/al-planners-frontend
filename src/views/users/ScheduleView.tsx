@@ -8,7 +8,7 @@ import { useMemo, useState } from "react"
 const ScheduleView = () => {
   const [date, setDate] = useState<CalendarDate>(new Date())
 
-  const { availableDates, availableTimes } = useAvailableDates()
+  const { availableDates, availableTimes, isLoading } = useAvailableDates()
 
   const isAvailable = useMemo(() => {
     if (!date) return false
@@ -35,7 +35,13 @@ const ScheduleView = () => {
           className="flex flex-col lg:flex-row"
         >
           <div className="flex-1">
-            <UsersCalendar date={date} setDate={setDate} availableDates={availableDates} availableTimes={availableTimes} />
+            <UsersCalendar
+              date={date}
+              setDate={setDate}
+              availableDates={availableDates}
+              availableTimes={availableTimes}
+              isLoading={isLoading}
+            />
           </div>
           {isAvailable && (
             <AvailableTimes />
