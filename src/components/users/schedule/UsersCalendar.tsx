@@ -52,7 +52,7 @@ const UsersCalendar = ({date, setDate, availableDates, availableTimes, isLoading
     <div
       className="w-full mt-20 p-4 text-lg font-bold flex flex-col gap-2 justify-center items-center text-center bg-slate-300"
     >
-      <p>Cargando el Calendario, por favor espere unos momentos...</p>
+      <p>Cargando el Calendario, por favor espere un momento...</p>
       <ClockIcon className='size-10' />   
     </div>
   )
