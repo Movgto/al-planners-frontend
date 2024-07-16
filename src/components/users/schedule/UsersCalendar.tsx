@@ -6,15 +6,17 @@ import { Availability, CalendarDate } from '@/types/index'
 import { useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { dateInTimezone } from '@/utils/index'
+import { ClockIcon } from '@heroicons/react/24/outline'
 
 type Props = {
   date: CalendarDate
   setDate: React.Dispatch<React.SetStateAction<CalendarDate>>
   availableDates: string[]
   availableTimes?: Availability[]
+  isLoading: boolean
 }
 
-const UsersCalendar = ({date, setDate, availableDates, availableTimes} : Props) => {  
+const UsersCalendar = ({date, setDate, availableDates, availableTimes, isLoading} : Props) => {  
   
   const queryClient = useQueryClient()          
   
@@ -46,6 +48,14 @@ const UsersCalendar = ({date, setDate, availableDates, availableTimes} : Props) 
     queryClient.invalidateQueries({queryKey: ['selectedDate']})    
   }, [date])
   
+  if (isLoading) return (
+    <div
+      className="w-full mt-20 p-4 text-lg font-bold flex flex-col gap-2 justify-center items-center text-center bg-slate-300"
+    >
+      <p>Cargando el Calendario, por favor espere unos momentos...</p>
+      <ClockIcon className='size-10' />   
+    </div>
+  )
 
   if (availableTimes) {
 
