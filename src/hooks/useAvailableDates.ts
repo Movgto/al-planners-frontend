@@ -4,7 +4,7 @@ import { getAllAvailableTimes } from "@/api/calendarAPI"
 import { dateInTimezone } from "../utils"
 
 const useAvailableDates = () => {
-  const {data: availableTimes} = useQuery({
+  const {data: availableTimes, isLoading} = useQuery({
     queryKey: ['allAvailableTimes'],
     queryFn: () => getAllAvailableTimes(dateInTimezone(new Date()).toISOString()),
     refetchOnWindowFocus: false,
@@ -39,7 +39,7 @@ const useAvailableDates = () => {
     return availableUniqueDates
   }, [availableTimes])
 
-  return {availableDates, availableTimes}
+  return {availableDates, availableTimes, isLoading}
 }
 
 export default useAvailableDates
