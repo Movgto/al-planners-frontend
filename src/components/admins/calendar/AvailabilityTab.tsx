@@ -26,7 +26,7 @@ const AvailabilityTab = () => {
     mutationFn: deleteAvailableTime,
     onError: error => toast.error(error.message),
     onSuccess: data => {
-      queryClient.invalidateQueries({queryKey: ['availabilityTimes', selectedDate.toISOString()]})
+      queryClient.invalidateQueries({queryKey: ['availableTimes']})
       toast.success(data)
     }
   })
