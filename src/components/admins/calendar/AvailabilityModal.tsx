@@ -3,12 +3,16 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { Fragment } from "react"
 import { useForm } from "react-hook-form"
 import { useSelectedDate } from "@/hooks/index"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { createAvailableTime } from "@/api/calendarAPI"
 import { toast } from "react-toastify"
-import { AvailabilityFormData } from "@/types/index"
+import { AvailabilityFormData, dayTimes } from "@/types/index"
 import { getDateInTimezone } from "@/utils/index"
-import ErrorMessage from "@/components/ErrorMessage"
+
+const hourArray : number[] = []
+for (let i = 1; i <= 12; i++) {
+  hourArray.push(i);
+}
 
 const AvailabilityModal = () => {
 
@@ -20,18 +24,18 @@ const AvailabilityModal = () => {
 
   const createAvailability = searchParams.get('createAvailability')
 
-  const show = !!createAvailability  
+  const show = !!createAvailability
 
-  const handleClose = () => {
-    navigate(location.pathname, { replace: true })
-  }
+  const queryClient = useQueryClient()  
 
   const defaultValues = {
-    startTime: 0,
-    endTime: 0
+    startTime: '',
+    startTimeAmPm: 'am',
+    endTime: '',
+    endTimeAmPm: 'am'
   }
 
-  const {register, handleSubmit, formState: {errors}, reset} = useForm({defaultValues})
+  const { register, handleSubmit, reset } = useForm({ defaultValues })
 
   const { mutate } = useMutation({
     mutationFn: createAvailableTime,
@@ -39,21 +43,44 @@ const AvailabilityModal = () => {
     onSuccess: data => {
       toast.success(data)
       reset()
+      queryClient.invalidateQueries({queryKey: ['availableTimes']})
+      navigate(location.pathname)
     }
   })
 
+  const get24Hour = (hour : string, dayTime : string) => {
+    switch (dayTime) {
+      case 'am':
+        if (hour === '12') return 0
+        return +hour        
+      case 'pm':
+        if (hour === '12') return +hour
+
+        return +hour + 12
+    }
+
+    return -1
+  }
+
   const handleForm = (formData: typeof defaultValues) => {
 
-    selectedDate.setHours(0, 0, 0, 0)
     
-    const availableTime : AvailabilityFormData = {
-      startTime: getDateInTimezone(selectedDate.setHours(formData.startTime)),
-      endTime: getDateInTimezone(selectedDate.setHours(formData.endTime)),
+
+    selectedDate.setHours(0, 0, 0, 0)
+
+    const availableTime: AvailabilityFormData = {
+      startTime: getDateInTimezone(selectedDate.setHours(get24Hour(formData.startTime, formData.startTimeAmPm))),
+      endTime: getDateInTimezone(selectedDate.setHours(get24Hour(formData.endTime, formData.endTimeAmPm))),
     }
 
     mutate(availableTime)
-    
+
     console.log(availableTime)
+  }
+
+  const handleClose = () => {
+    reset()
+    navigate(location.pathname, { replace: true })
   }
 
   return (
@@ -91,59 +118,92 @@ const AvailabilityModal = () => {
                 onSubmit={handleSubmit(handleForm)}
               >
                 <div
-                  className='flex flex-col gap-2'
+                  className='flex flex-col gap-2 items-center'
                 >
-                  <label htmlFor="startTime">Inicio</label>
-                  <input
-                    type="number"
-                    id="startTime"
-                    className='ring-1 ring-slate-300 rounded-sm p-1'
-                    {...register('startTime',
-                      {
-                        required: 'Este campo es requerido',
-                        valueAsNumber: true,
-                        validate: {
-                          min: val => {
-                            if (+val < 0) return 'El valor debe ser mínimo 0'
-                          },
-                          max: val => {
-                            if (+val > 23) return 'El valor debe ser máximo 23'
-                          }
-                        }
-                      }
-                    )}
-                  />
-                  {errors.startTime && errors.startTime.message && (
-                    <ErrorMessage message={errors.startTime.message} />
-                  )}
+                  <h3
+                      className="text-lg font-bold text-slate-700"
+                    >Hora de inicio</h3>
+                  <div
+                    className="flex gap-2"
+                  >
+                    
+                    <div
+                      className="flex flex-col gap-2"
+                    >
+                      <select
+                        id="startTime"
+                        defaultValue={""}                 
+                        {...register('startTime', {
+                          required: 'Este campo es obligatorio'
+                        })}
+                      >
+                        <option value="" hidden>--:--</option>
+                        {hourArray.map(hour => (
+                          <option value={hour}>{hour.toString().padStart(2, '0')}:00</option>
+                        ))}
+                      </select>     
+                    </div>
+                    <div
+                      className="flex flex-col gap-2"
+                    >                      
+                      <select
+                        id="startTimeAmPm"                        
+                        {...register('startTimeAmPm', {
+                          required: 'Este campo es obligatorio'
+                        })}
+                      >
+                        {dayTimes.map(dt => (
+                          <option value={dt}>{dt.toUpperCase()}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
                 </div>
+
                 <div
-                  className='flex flex-col gap-2'
+                  className='flex flex-col gap-2 items-center'
                 >
-                  <label htmlFor="endTime">Final</label>
-                  <input
-                    type="number"
-                    id="endTime"
-                    className='ring-1 ring-slate-300 rounded-sm p-1'
-                    {...register('endTime',
-                      {
-                        required: 'Este campo es requerido',
-                        valueAsNumber: true,
-                        validate: {
-                          min: val => {
-                            if (+val < 0) return 'El valor debe ser mínimo 0'
-                          },
-                          max: val => {
-                            if (+val > 23) return 'El valor debe ser máximo 23'
-                          }
-                        }
-                      }
-                    )}
-                  />
-                  {errors.endTime && errors.endTime.message && (
-                    <ErrorMessage message={errors.endTime.message} />
-                  )}
+                  <h3
+                      className="text-lg font-bold text-slate-700"
+                    >Hora final</h3>
+                  <div
+                    className="flex gap-2"
+                  >
+                    
+                    <div
+                      className="flex flex-col gap-2"
+                    >
+                      <select
+                        id="endTime"
+                        defaultValue={""}                                            
+                        {...register('endTime', {
+                          required: 'Este campo es obligatorio'
+                        })}
+                      >
+                        <option value={""} hidden defaultChecked>--:--</option>
+                        {hourArray.map(hour => (
+                          <option value={hour}>{hour.toString().padStart(2, '0')}:00</option>
+                        ))}
+                      </select>                      
+                    </div>
+                    <div
+                      className="flex flex-col gap-2"
+                    >                      
+                      <select
+                        id="endTimeAmPm"                        
+                        {...register('endTimeAmPm', {
+                          required: 'Este campo es obligatorio'
+                        })}
+                      >
+                        {dayTimes.map(dt => (
+                          <option value={dt}>{dt.toUpperCase()}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
                 </div>
+                
+                
                 <input
                   type="submit"
                   className="bg-cyan-700 text-white uppercase font-bold hover:cursor-pointer hover:bg-cyan-500 p-2"
