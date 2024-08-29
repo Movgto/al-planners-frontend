@@ -9,8 +9,9 @@ import { toast } from "react-toastify"
 import ScheduleForm from "./ScheduleForm"
 import { useForm } from "react-hook-form"
 import { dateInTimezone, formatHourNum, getDateInTimezone } from "@/utils/index"
+import { getAdmins } from "@/api/authAPI"
 
-export type RangeAvailability = [number?, number?]
+export type RangeAvailability = [number?, number?, string?]
 
 const ScheduleModal = () => {
 
@@ -65,6 +66,11 @@ const ScheduleModal = () => {
     }
   })
 
+  const { data: adminsList } = useQuery({
+    queryKey: ['adminsList'],
+    queryFn: getAdmins
+  })
+
   const defaultValues: ClientEventFormData = {
     name1 : '',
     name2 : '',
@@ -82,6 +88,10 @@ const ScheduleModal = () => {
 
     const start = dateInTimezone(new Date(copyDate.setHours(newEventTime[0]!)))
     const end = dateInTimezone(new Date(copyDate.setHours(newEventTime[1]!)))
+
+    if (!adminsList) return
+
+    if (!adminsList.length) return    
 
     const newEvent: EventFormData = {
       summary: et.name,
@@ -101,7 +111,8 @@ const ScheduleModal = () => {
           name: formData.name2,
           email: formData.email
         }
-      ]
+      ],
+      admin: newEventTime[2]!
     }
 
     mutate(newEvent)
@@ -187,7 +198,7 @@ const ScheduleModal = () => {
           >
             <DialogPanel
               className="px-4 py-5 bg-white shadow-2xl rounded-2xl w-full max-w-5xl
-                      flex flex-col gap-4 items-center"
+                      flex flex-col gap-4 items-center max-h-[80vh] overflow-y-auto"
             >
               <h2
                 className="text-2xl font-extrabold text-slate-700 text-center"
