@@ -9,7 +9,7 @@ import { toast } from "react-toastify"
 import { AvailabilityFormData, dayTimes } from "@/types/index"
 import { getDateInTimezone } from "@/utils/index"
 
-const hourArray : number[] = []
+const hourArray: number[] = []
 for (let i = 1; i <= 12; i++) {
   hourArray.push(i);
 }
@@ -26,7 +26,7 @@ const AvailabilityModal = () => {
 
   const show = !!createAvailability
 
-  const queryClient = useQueryClient()  
+  const queryClient = useQueryClient()
 
   const defaultValues = {
     startTime: '',
@@ -43,16 +43,16 @@ const AvailabilityModal = () => {
     onSuccess: data => {
       toast.success(data)
       reset()
-      queryClient.invalidateQueries({queryKey: ['availableTimes']})
+      queryClient.invalidateQueries({ queryKey: ['availableTimes'] })
       navigate(location.pathname)
     }
-  })
+  })  
 
-  const get24Hour = (hour : string, dayTime : string) => {
+  const get24Hour = (hour: string, dayTime: string) => {
     switch (dayTime) {
       case 'am':
         if (hour === '12') return 0
-        return +hour        
+        return +hour
       case 'pm':
         if (hour === '12') return +hour
 
@@ -64,13 +64,11 @@ const AvailabilityModal = () => {
 
   const handleForm = (formData: typeof defaultValues) => {
 
-    
-
     selectedDate.setHours(0, 0, 0, 0)
 
     const availableTime: AvailabilityFormData = {
       startTime: getDateInTimezone(selectedDate.setHours(get24Hour(formData.startTime, formData.startTimeAmPm))),
-      endTime: getDateInTimezone(selectedDate.setHours(get24Hour(formData.endTime, formData.endTimeAmPm))),
+      endTime: getDateInTimezone(selectedDate.setHours(get24Hour(formData.endTime, formData.endTimeAmPm)))
     }
 
     mutate(availableTime)
@@ -121,18 +119,18 @@ const AvailabilityModal = () => {
                   className='flex flex-col gap-2 items-center'
                 >
                   <h3
-                      className="text-lg font-bold text-slate-700"
-                    >Hora de inicio</h3>
+                    className="text-lg font-bold text-slate-700"
+                  >Hora de inicio</h3>
                   <div
                     className="flex gap-2"
                   >
-                    
+
                     <div
                       className="flex flex-col gap-2"
                     >
                       <select
                         id="startTime"
-                        defaultValue={""}                 
+                        defaultValue={""}
                         {...register('startTime', {
                           required: 'Este campo es obligatorio'
                         })}
@@ -141,13 +139,13 @@ const AvailabilityModal = () => {
                         {hourArray.map(hour => (
                           <option value={hour}>{hour.toString().padStart(2, '0')}:00</option>
                         ))}
-                      </select>     
+                      </select>
                     </div>
                     <div
                       className="flex flex-col gap-2"
-                    >                      
+                    >
                       <select
-                        id="startTimeAmPm"                        
+                        id="startTimeAmPm"
                         {...register('startTimeAmPm', {
                           required: 'Este campo es obligatorio'
                         })}
@@ -164,18 +162,18 @@ const AvailabilityModal = () => {
                   className='flex flex-col gap-2 items-center'
                 >
                   <h3
-                      className="text-lg font-bold text-slate-700"
-                    >Hora final</h3>
+                    className="text-lg font-bold text-slate-700"
+                  >Hora final</h3>
                   <div
                     className="flex gap-2"
                   >
-                    
+
                     <div
                       className="flex flex-col gap-2"
                     >
                       <select
                         id="endTime"
-                        defaultValue={""}                                            
+                        defaultValue={""}
                         {...register('endTime', {
                           required: 'Este campo es obligatorio'
                         })}
@@ -184,13 +182,13 @@ const AvailabilityModal = () => {
                         {hourArray.map(hour => (
                           <option value={hour}>{hour.toString().padStart(2, '0')}:00</option>
                         ))}
-                      </select>                      
+                      </select>
                     </div>
                     <div
                       className="flex flex-col gap-2"
-                    >                      
+                    >
                       <select
-                        id="endTimeAmPm"                        
+                        id="endTimeAmPm"
                         {...register('endTimeAmPm', {
                           required: 'Este campo es obligatorio'
                         })}
@@ -201,9 +199,8 @@ const AvailabilityModal = () => {
                       </select>
                     </div>
                   </div>
-                </div>
-                
-                
+                </div>                
+
                 <input
                   type="submit"
                   className="bg-cyan-700 text-white uppercase font-bold hover:cursor-pointer hover:bg-cyan-500 p-2"
