@@ -28,6 +28,7 @@ const Header = () => {
   const logout = () => {
     localStorage.removeItem('ALPLANNERS_AUTH_TOKEN')
     queryClient.invalidateQueries({ queryKey: ['admin'] })
+    queryClient.invalidateQueries({queryKey: ['adminPreferences']})
   }
 
   if (data) return (
