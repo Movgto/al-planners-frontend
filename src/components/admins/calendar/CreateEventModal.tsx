@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form"
 import { useLocation, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import { dateInTimezone, getDateInTimezone } from "@/utils/index"
+import { getAdmins } from "@/api/authAPI"
 
 const hours = () => {
 	const hoursArray = []
@@ -24,7 +25,8 @@ const defaultValues = {
 	startTime: '',
 	attendeeName1: '',
 	attendeeName2: '',
-	attendeeEmail: ''
+	attendeeEmail: '',
+	admin: ''
 }
 
 const CreateEventModal = () => {
@@ -45,6 +47,11 @@ const CreateEventModal = () => {
 		refetchOnWindowFocus: false,
 		retry: 3
 	})
+
+	const { data: adminsList, isError, error } = useQuery({
+    queryKey: ['adminsList'],
+    queryFn: getAdmins
+  })
 
 	const { mutate } = useMutation({
 		mutationFn: createEvent,
@@ -99,7 +106,8 @@ const CreateEventModal = () => {
 					name: formData.attendeeName2,
 					email: formData.attendeeEmail
 				}
-			]
+			],
+			admin: formData.admin
 		}
 
 		mutate(event)
@@ -113,7 +121,12 @@ const CreateEventModal = () => {
 		navigate(location.pathname, { replace: true })
 	}
 
-	if (data && data.length) return (
+	if (isError) {
+		toast.error(error.message)
+		handleClose()
+	}
+
+	if (data && data.length && adminsList) return (
 		<Transition appear show={show} as={Fragment}>
 			<Dialog as="div" className="relative z-10" onClose={handleClose}>
 				<TransitionChild
@@ -282,6 +295,26 @@ const CreateEventModal = () => {
 										{errors.attendeeEmail && errors.attendeeEmail.message && (
 											<ErrorMessage message={errors.attendeeEmail.message} />
 										)}
+									</div>
+
+									<div
+										className="flex flex-col gap-2"
+									>
+										<label
+											htmlFor="admin"
+											className="text-lg font-bold text-slate-700"
+										>¿Quién atenderá la cita?</label>
+										<select
+											id="admin"
+											{...register('admin', {
+												required: 'Debes seleccionar un administrador'
+											})}
+										>
+											<option hidden value="">--Selecciona un Administrador</option>
+											{adminsList.map(ad => (
+												<option value={ad._id}>{ad.name}</option>
+											))}
+										</select>
 									</div>
 
 									<input
