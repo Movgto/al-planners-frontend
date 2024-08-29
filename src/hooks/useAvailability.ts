@@ -2,6 +2,8 @@ import { RangeAvailability } from "@/components/users/schedule/ScheduleModal"
 import { Availability, Event, EventType } from "../types"
 import { useMemo } from "react"
 import { dateInTimezone } from "../utils"
+import { useQuery } from "@tanstack/react-query"
+import { getAdmins } from "@/api/authAPI"
 
 type UseAvailabilityParams = {
   availableTimes: Availability[] | undefined
@@ -9,12 +11,18 @@ type UseAvailabilityParams = {
   events: Event[] | undefined
 }
 
-const useAvailability = ({availableTimes, et, events} : UseAvailabilityParams) => { 
+const useAvailability = ({ availableTimes, et, events }: UseAvailabilityParams) => {
+
+  const { data: adminsList } = useQuery({
+    queryKey: ['adminsList'],
+    queryFn: getAdmins
+  })
+
   const availability = useMemo(() => {
     let rangeAvailable: RangeAvailability = []
-    const avail: RangeAvailability[] = []
+    let avail: RangeAvailability[] = []
 
-    if (!availableTimes || !availableTimes.length || !et || !events) {
+    if (!availableTimes || !availableTimes.length || !et || !events || !adminsList || !adminsList.length) {
       console.log('Devolviendo arreglo de rangos vacio desde availability funcion')
       return avail
     }
@@ -35,42 +43,57 @@ const useAvailability = ({availableTimes, et, events} : UseAvailabilityParams) =
         const startHour = i
         const endHour = i + et.duration
 
-        if (endHour > endTime) break          
+        if (endHour > endTime) break
 
-        rangeAvailable = [startHour, endHour]
+        const availableRanges : RangeAvailability[] = []
 
-        for (const e of events) {
-          const eStartHour = dateInTimezone(new Date(e.start.dateTime)).getHours()
-          const eEndHour = dateInTimezone(new Date(e.end.dateTime)).getHours()
+        for (const ad of adminsList) {
+          rangeAvailable = [startHour, endHour, ad._id]
 
-          // Si el nuevo evento se encuentra fuera del tiempo de otros eventos existentes...
-          if ((startHour < eStartHour && endHour <= eStartHour) ||
-            (startHour >= eEndHour && endHour > eEndHour)) {
-            // entonces continua checando más eventos
+          const adminEvents = events.filter(e => e.admin === ad._id)
+
+          for (const e of adminEvents) {
+            const eStartHour = dateInTimezone(new Date(e.start.dateTime)).getHours()
+            const eEndHour = dateInTimezone(new Date(e.end.dateTime)).getHours()
+
+            // Si el nuevo evento se encuentra fuera del tiempo de otros eventos existentes...
+            if ((startHour < eStartHour && endHour <= eStartHour) ||
+              (startHour >= eEndHour && endHour > eEndHour)) {
+              // entonces continua checando más eventos
+            } else {
+              // sino vacia el actual rango y termina las iteraciones
+              rangeAvailable = []
+              break
+            }
+          }
+
+          // si el rango esta vacío significa que hubo un conflicto con el tiempo de otro evento        
+          if (!rangeAvailable.length) {
+            // Entonces se debe terminar este ciclo e incrementar i en uno para buscar en la hora siguiente
+            continue
           } else {
-            // sino vacia el actual rango y termina las iteraciones
-            rangeAvailable = []
-            break
+            // si no está vacio significa que no hubo conflictos y se puede añadir el rango a la lista de disponibilidad
+            // entonces se incrementa i la cantidad de la duración del nuevo evento, ya que estará ahora ocupado
+            availableRanges.push(rangeAvailable)            
           }
         }
 
-        // si el rango esta vacío significa que hubo un conflicto con el tiempo de otro evento        
-        if (!rangeAvailable.length) {
-          // Entonces se debe terminar este ciclo e incrementar i en uno para buscar en la hora siguiente
-          i += 1
+        if (!availableRanges.length) {
+          i++
         } else {
-          // si no está vacio significa que no hubo conflictos y se puede añadir el rango a la lista de disponibilidad
-          // entonces se incrementa i la cantidad de la duración del nuevo evento, ya que estará ahora ocupado
-          avail.push(rangeAvailable)
+          avail = avail.concat(availableRanges).sort((a, b) => {
+            return +a[0]! - +b[0]!
+          })
+
           i += et.duration
         }
       }
     }
     console.log('====== Tiempos de disponibilidad para nueva cita ======')
-    console.log(avail)    
+    console.log(avail)
 
     return avail
-  }, [availableTimes, events, et])
+  }, [availableTimes, events, et, adminsList])
 
   return availability
 }
