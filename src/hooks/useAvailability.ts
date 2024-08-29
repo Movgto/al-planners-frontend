@@ -50,7 +50,7 @@ const useAvailability = ({ availableTimes, et, events }: UseAvailabilityParams) 
         for (const ad of adminsList) {
           rangeAvailable = [startHour, endHour, ad._id]
 
-          const adminEvents = events.filter(e => e.admin === ad._id)
+          const adminEvents = events.filter(e => e.admin._id === ad._id)
 
           for (const e of adminEvents) {
             const eStartHour = dateInTimezone(new Date(e.start.dateTime)).getHours()
