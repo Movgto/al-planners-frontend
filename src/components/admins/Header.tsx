@@ -58,7 +58,7 @@ const Header = () => {
         </div>
       </nav>
 
-      <PopMenu logout={logout} user={data} />
+      <PopMenu logout={logout} admin={data} />
 
 
     </header>
