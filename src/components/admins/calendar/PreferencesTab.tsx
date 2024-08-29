@@ -11,7 +11,7 @@ import { toast } from "react-toastify"
 
 const PreferencesTab = () => {
 
-  const { data, isError, error } = useQuery({
+  const { data } = useQuery({
     queryKey: ['adminPreferences'],
     queryFn: getAdminPreferences
   })
