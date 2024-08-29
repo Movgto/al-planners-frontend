@@ -79,6 +79,8 @@ const AppointmenstList = ({ eventList, isoDate }: AppointmenstListProps) => {
               <p>{formatHour(e.start.dateTime)}</p>{' - '}
               <p>{formatHour(e.end.dateTime)}</p>
             </div>
+
+            <p>{e.admin.name}</p>
           </div>
 
           <div
