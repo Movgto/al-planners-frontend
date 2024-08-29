@@ -1,10 +1,12 @@
 import {z} from 'zod'
+import { adminShortSchema } from './auth'
 
 //Calendar types
 
 export const calendarTabs = [
   'Disponibilidad',
   'Citas',
+  'Preferencias',
 ] as const
 
 const calendarTabsSchema = z.enum(calendarTabs)
@@ -51,7 +53,8 @@ export const eventSchema = z.object({
   attendees: z.array(z.object({
     name: z.string(),
     email: z.string()
-  })) 
+  })),
+  admin: adminShortSchema
 })
 
 export const eventListSchema = z.array(eventSchema)
@@ -60,7 +63,7 @@ export type EventList = z.infer<typeof eventListSchema>
 
 export type Event = z.infer<typeof eventSchema>
 
-export type EventFormData = Pick<Event, 'summary'|'start'|'end'|'sentToCalendar'|'attendees'>
+export type EventFormData = Pick<Event, 'summary'|'start'|'end'|'sentToCalendar'|'attendees'|'admin'>
 
 export type ClientEventFormData = {
   name1: string
