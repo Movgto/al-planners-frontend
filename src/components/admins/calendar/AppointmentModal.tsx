@@ -104,7 +104,7 @@ const AppointmentModal = () => {
                       >Correo electrónico de participante:</span> <span>{at.email}</span>
                     </p>
                   </div>
-                ))}                
+                ))}            
               </DialogPanel>
             </TransitionChild>
           </div>
