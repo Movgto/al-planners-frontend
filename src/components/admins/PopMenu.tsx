@@ -1,4 +1,4 @@
-import { UserShort } from "@/types/auth"
+import { AdminShort } from "@/types/auth"
 import { Popover, PopoverButton, PopoverPanel, Transition } from "@headlessui/react"
 import { Bars3Icon } from "@heroicons/react/24/outline"
 import { Fragment } from "react"
@@ -6,10 +6,10 @@ import { Link } from "react-router-dom"
 
 type PopMenuProps = {
   logout: () => void
-  user: UserShort
+  admin: AdminShort
 }
 
-const PopMenu = ({ logout, user }: PopMenuProps) => {
+const PopMenu = ({ logout, admin }: PopMenuProps) => {
   return (
     <Popover className="flex lg:hidden">
       <PopoverButton
@@ -35,7 +35,7 @@ const PopMenu = ({ logout, user }: PopMenuProps) => {
           >
             <h2
               className="text-lg text-rose-800 font-semibold text-center"
-            >Hola, {user.name.split(' ')[0]}</h2>
+            >Hola, {admin.name.split(' ')[0]}</h2>
             <Link
               to="/admins"
               className="hover:text-rose-800"
