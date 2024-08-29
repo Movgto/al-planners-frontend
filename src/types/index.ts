@@ -57,13 +57,29 @@ export const eventSchema = z.object({
   admin: adminShortSchema
 })
 
+export const eventFormDataSchema = z.object({
+  summary: z.string(),
+  start: z.object({
+    dateTime: z.string()    
+  }),
+  end: z.object({
+    dateTime: z.string()    
+  }),
+  sentToCalendar: z.boolean(),
+  attendees: z.array(z.object({
+    name: z.string(),
+    email: z.string()
+  })),
+  admin: z.string()
+})
+
 export const eventListSchema = z.array(eventSchema)
 
 export type EventList = z.infer<typeof eventListSchema>
 
 export type Event = z.infer<typeof eventSchema>
 
-export type EventFormData = Pick<Event, 'summary'|'start'|'end'|'sentToCalendar'|'attendees'|'admin'>
+export type EventFormData = z.infer<typeof eventFormDataSchema>
 
 export type ClientEventFormData = {
   name1: string
