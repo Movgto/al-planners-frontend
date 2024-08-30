@@ -60,16 +60,16 @@ export const useAuthUrl = () => {
   return {data, isLoading, isError, error}
 }
 
+const getGApiCode = () => {
+  return localStorage.getItem('GOOGLE_API_TOKEN')
+}
+
 export const useGApiCode = () => {  
-  const location = useLocation()
-  const searchParams = new URLSearchParams(location.search)
-  const codeFromPath = searchParams.get('code')
-
-  const code = useMemo(() => {
-    return localStorage.getItem('GOOGLE_API_TOKEN')
-  }, [codeFromPath])
-
-  console.log(code)
+  
+  const {data: code} = useQuery({
+    queryKey: ['googleAuthToken'],
+    queryFn: getGApiCode
+  })
 
   return code
-} 
+}
