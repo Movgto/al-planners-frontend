@@ -37,6 +37,8 @@ const SeeAppointmentsOption = ({setOption} : AppointmentMenuOptionProps) => {
     mutationFn: syncEvents,
     onError: error => {
       localStorage.removeItem('GOOGLE_API_TOKEN')
+      queryClient.invalidateQueries({queryKey: ['googleAuthToken']})
+      
       navigate(location.pathname)
       toast.error(error.message)
     },
