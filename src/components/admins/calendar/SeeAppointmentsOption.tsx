@@ -70,6 +70,7 @@ const SeeAppointmentsOption = ({setOption} : AppointmentMenuOptionProps) => {
     if (!codeFromPath) return
 
     localStorage.setItem('GOOGLE_API_TOKEN', codeFromPath)
+    queryClient.invalidateQueries({queryKey: ['googleAuthToken']})
     navigate(location.pathname)
   }, [codeFromPath])
 
