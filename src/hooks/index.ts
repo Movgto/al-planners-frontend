@@ -3,7 +3,6 @@ import { CalendarDate, EventList } from "../types"
 import { useMemo } from "react"
 import { getAuthURL } from "@/api/calendarAPI"
 import { dateInTimezone } from "../utils"
-import { useLocation } from "react-router-dom"
 
 export const useEventsFromDate = (eventList: EventList, isoDate: string) => {
 
