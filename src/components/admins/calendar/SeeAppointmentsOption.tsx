@@ -5,9 +5,8 @@ import { useLocation, useNavigate } from "react-router-dom"
 import AppointmenstList from "./AppointmenstList"
 import { useAuthUrl, useGApiCode, useSelectedDate } from "@/hooks/index"
 import { toast } from "react-toastify"
-import { useEffect } from "react"
 
-const SeeAppointmentsOption = ({setOption} : AppointmentMenuOptionProps) => {
+const SeeAppointmentsOption = ({ setOption }: AppointmentMenuOptionProps) => {
 
   const navigate = useNavigate()
 
@@ -15,19 +14,15 @@ const SeeAppointmentsOption = ({setOption} : AppointmentMenuOptionProps) => {
 
   const location = useLocation()
 
-  const searchParams = new URLSearchParams(location.search)
-
-  const codeFromPath = searchParams.get('code')
-
   const code = useGApiCode()
 
-  const {data: authUrl} = useAuthUrl()
+  const { data: authUrl } = useAuthUrl()
 
   const handleClick = () => {
     setOption('Inicio')
   }
 
-  const {data} = useQuery({
+  const { data } = useQuery({
     queryKey: ['calendarEvents'],
     queryFn: getEvents,
     refetchOnWindowFocus: false
@@ -37,13 +32,12 @@ const SeeAppointmentsOption = ({setOption} : AppointmentMenuOptionProps) => {
     mutationFn: syncEvents,
     onError: error => {
       localStorage.removeItem('GOOGLE_API_TOKEN')
-      queryClient.invalidateQueries({queryKey: ['googleAuthToken']})
-      
+      queryClient.invalidateQueries({ queryKey: ['googleAuthToken'] })
       navigate(location.pathname)
       toast.error(error.message)
     },
     onSuccess: data => {
-      queryClient.invalidateQueries({queryKey: ['calendarEvents']})
+      queryClient.invalidateQueries({ queryKey: ['calendarEvents'] })
       toast.success(data)
     }
   })
@@ -57,7 +51,7 @@ const SeeAppointmentsOption = ({setOption} : AppointmentMenuOptionProps) => {
 
   const handleAuth = () => {
     if (!authUrl) return
-    
+
     window.open(authUrl.url, '_self')
   }
 
@@ -65,14 +59,6 @@ const SeeAppointmentsOption = ({setOption} : AppointmentMenuOptionProps) => {
     if (!code) return
     mutate(code)
   }
-
-  useEffect(() => {
-    if (!codeFromPath) return
-
-    localStorage.setItem('GOOGLE_API_TOKEN', codeFromPath)
-    queryClient.invalidateQueries({queryKey: ['googleAuthToken']})
-    navigate(location.pathname)
-  }, [codeFromPath])
 
   if (data) return (
     <div
@@ -109,14 +95,14 @@ const SeeAppointmentsOption = ({setOption} : AppointmentMenuOptionProps) => {
 
         {authUrl && !code && (
           <li className="flex-1">
-          <button
-            type="button"
-            onClick={handleAuth}
-            className="bg-cyan-700 py-2 text-white font-bold uppercase w-full hover:bg-cyan-500 text-nowrap px-2"
-          >Accede con Google para Sincronizar</button>
-        </li>
+            <button
+              type="button"
+              onClick={handleAuth}
+              className="bg-cyan-700 py-2 text-white font-bold uppercase w-full hover:bg-cyan-500 text-nowrap px-2"
+            >Accede con Google para Sincronizar</button>
+          </li>
         )}
-        
+
       </ul>
 
       {data.length ? (
