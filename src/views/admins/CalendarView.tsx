@@ -1,5 +1,5 @@
 import Calendar from '@/components/admins/calendar/Calendar'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { CalendarDate, CalendarTab, calendarTabs } from '@/types/index'
 import CalendarTabs from '@/components/admins/calendar/CalendarTabs'
 import { classes } from '@/utils/index'
@@ -11,11 +11,16 @@ import CreateEventModal from '@/components/admins/calendar/CreateEventModal'
 import AppointmentModal from '@/components/admins/calendar/AppointmentModal'
 import AvailabilityModal from '@/components/admins/calendar/AvailabilityModal'
 import {ArrowPathIcon} from '@heroicons/react/24/outline'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const CalendarView = () => {  
   const [date, setDate] = useState<CalendarDate>(new Date())
   const [tab, setTab] = useState<CalendarTab>('Disponibilidad')
   const queryClient = useQueryClient()
+  const location = useLocation()
+  const searchParams = new URLSearchParams(location.search)
+  const codeFromPath = searchParams.get('code')
+  const navigate= useNavigate()
 
   const handleTabClick = (tab: CalendarTab) => {
     setTab(tab)
@@ -38,6 +43,14 @@ const CalendarView = () => {
   const refetchData = () => {
     queryClient.invalidateQueries({queryKey: ['calendarEvents']})    
   }
+
+  useEffect(() => {
+    if (!codeFromPath) return
+
+    localStorage.setItem('GOOGLE_API_TOKEN', codeFromPath)
+    queryClient.invalidateQueries({ queryKey: ['googleAuthToken'] })
+    navigate(location.pathname)
+  }, [codeFromPath])
 
   if (isLoading) return 'Cargando eventos del calendario'
 
