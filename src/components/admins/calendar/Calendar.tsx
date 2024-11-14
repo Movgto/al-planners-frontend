@@ -41,7 +41,7 @@ const Calendar = ({date, setDate} : CalendarProps) => {
     const currentYear = date.getFullYear()
     const currentMonth = date.getMonth()
 
-    for (let et of eventList) {
+    for (const et of eventList) {
       const eventDate = dateInTimezone(new Date(et.start.dateTime))
       const year = eventDate.getFullYear()
       const month = eventDate.getMonth()
