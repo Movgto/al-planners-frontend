@@ -37,7 +37,21 @@ const UsersCalendar = ({date, setDate, availableDates, availableTimes, isLoading
       weekday: 'narrow'      
     }).format(date)
     return displayDate
-  }  
+  }
+
+  const minDate = () => {
+    const timeOffset = new Date().getTimezoneOffset()
+    const today = new Date(Date.now())
+
+    today.setHours(0,0,0,0)
+
+    const tomorrowDate = new Date(today.getTime() + (24 * 60 * 60000) + timeOffset * 60000)
+    tomorrowDate.setHours(0, 0, 0, 0)    
+
+    console.log('Fecha de mañana:', tomorrowDate)
+    
+    return tomorrowDate
+  }
 
   useEffect(() => {
     if (!date) return
@@ -64,11 +78,11 @@ const UsersCalendar = ({date, setDate, availableDates, availableTimes, isLoading
         <StaticDatePicker
           orientation='portrait'
           openTo='day'
-          value={date}
+          value={minDate()}
           onChange={handleChange}
           dayOfWeekFormatter={dayOfWeekFormatter}
           timezone={import.meta.env.VITE_TIMEZONE}
-          minDate={dateInTimezone(new Date(availableDates[0]))}          
+          minDate={minDate()}          
           shouldDisableDate={day => {
             
             if (availableDates.includes(day.toDateString())) {
