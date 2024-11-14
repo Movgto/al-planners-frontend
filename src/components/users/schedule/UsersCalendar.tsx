@@ -5,7 +5,6 @@ import {es} from 'date-fns/locale/es'
 import { Availability, CalendarDate } from '@/types/index'
 import { useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
-import { dateInTimezone } from '@/utils/index'
 import { ClockIcon } from '@heroicons/react/24/outline'
 
 type Props = {
